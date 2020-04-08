@@ -13,10 +13,17 @@ export const steam = () => keyframes`
   0% {
     background-position: 400% 0;
   }
-  50% {
+  25% {
     background-position: 300% 0;
   }
-  100% {
+  50% {
     background-position: 200% 0;
+  }
+  75% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+
   }
 `;

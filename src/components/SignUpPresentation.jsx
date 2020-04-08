@@ -4,16 +4,10 @@ import {
   Container,
   Wrap,
   Title,
-  StyledInput,
-  LoadingWrap
+  LoadingWrap,
+  ThumbnailWrap
 } from "./LoginStyledComponent";
-import {
-  ValidateWrap,
-  ValidateInputWrap,
-  ValidateButtonWrap,
-  ValidateComment
-} from "./SignUpStyledComponent";
-import { ArrowLoading } from "../assets/icons";
+import { Account, Password, Email } from "../assets/icons";
 
 const SignUpPresentation = ({
   id,
@@ -30,6 +24,8 @@ const SignUpPresentation = ({
   emailToken,
   tokenEl,
   confirmEmailToken,
+  thumbnail,
+  thumbnailEl,
   isDbCheckLoading,
   isCheckEmailLoading,
   isSignUpLoading,
@@ -39,6 +35,8 @@ const SignUpPresentation = ({
   onChangeName,
   onChangeEmail,
   onChangeConfirmEmailToken,
+  onChangeThumbnail,
+  onClickThumbnail,
   onDoubleCheck,
   onCheckEmail,
   onCancel,
@@ -46,120 +44,172 @@ const SignUpPresentation = ({
 }) => (
   <Container>
     <Wrap>
-      <Title>회원가입</Title>
-      <label>아이디</label>
-      <ValidateWrap height={35}>
-        <ValidateInputWrap>
-          <StyledInput
-            type="text"
-            autoComplete="off"
-            placeholder="아이디를 입력하세요."
-            value={id}
-            onChange={onChangeId}
-            ref={idEl}
+      <Title>➤ 회원가입</Title>
+      <ThumbnailWrap>
+        {thumbnail ? (
+          <img
+            src={thumbnail}
+            width={200}
+            height={120}
+            style={{
+              border: "1px solid black",
+              borderRadius: 20,
+              cursor: "pointer"
+            }}
+            onClick={onClickThumbnail}
+            alt={"thumbnail"}
           />
-        </ValidateInputWrap>
-        <ValidateButtonWrap>
+        ) : (
+          <Account
+            style={{ width: 120, height: 120, cursor: "pointer" }}
+            onClick={onClickThumbnail}
+          />
+        )}
+
+        <input
+          type="file"
+          onChange={onChangeThumbnail}
+          ref={thumbnailEl}
+          hidden
+        />
+      </ThumbnailWrap>
+      <div className="input-group mb-3">
+        <div className="input-group-prepend">
+          <span className="input-group-text">
+            <Account style={{ width: 24, height: 24 }} />
+          </span>
+        </div>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="계정을 입력하세요."
+          value={id}
+          onChange={onChangeId}
+          ref={idEl}
+        />
+        <div className="input-group-append">
           <LoadingWrap
-            width={90}
-            height={35}
+            width={100}
+            height={38}
             loading={isDbCheckLoading ? 1 : 0}
           >
-            <StyledInput
+            <input
+              className="btn btn-outline-primary btn-block"
               type="button"
               value="중복확인"
               onClick={onDoubleCheck}
             />
           </LoadingWrap>
-        </ValidateButtonWrap>
-      </ValidateWrap>
-      <p>
-        <label>비밀번호</label>
-        <StyledInput
-          type="password"
-          autoComplete="off"
-          placeholder="비밀번호를 입력하세요."
-          value={pwd}
-          onChange={onChangePwd}
-          ref={pwdEl}
-        />
-        <sub></sub>
-      </p>
-      <p>
-        <label>비밀번호 확인</label>
-        <StyledInput
-          type="password"
-          autoComplete="off"
-          placeholder="비밀번호를 입력하세요."
-          value={confirmPwd}
-          onChange={onChangeConfirmPwd}
-          ref={confirmPwdEl}
-        />
-        <sub></sub>
-      </p>
-      <hr />
-      <p>
-        <label>이름</label>
-        <StyledInput
+        </div>
+      </div>
+      <div className="input-group mb-3">
+        <div className="input-group-prepend">
+          <span className="input-group-text">
+            <Account style={{ width: 24, height: 24 }} />
+          </span>
+        </div>
+        <input
           type="text"
-          autoComplete="off"
+          className="form-control"
           placeholder="이름을 입력하세요."
           value={name}
           onChange={onChangeName}
           ref={nameEl}
         />
-      </p>
-      <label>이메일</label>
-      <ValidateWrap height={35}>
-        <ValidateInputWrap>
-          <StyledInput
-            type="text"
-            autoComplete="off"
-            placeholder="이메일을 입력하세요."
-            value={email}
-            onChange={onChangeEmail}
-            ref={emailEl}
-          />
-        </ValidateInputWrap>
-        <ValidateButtonWrap bottom={0}>
+      </div>
+      <div className="input-group mb-3">
+        <div className="input-group-prepend">
+          <span className="input-group-text">
+            <Password style={{ width: 24, height: 24 }} />
+          </span>
+        </div>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="암호를 입력하세요."
+          value={pwd}
+          onChange={onChangePwd}
+          ref={pwdEl}
+        />
+      </div>
+      <div className="input-group mb-3">
+        <div className="input-group-prepend">
+          <span className="input-group-text">
+            <Password style={{ width: 24, height: 24 }} />
+          </span>
+        </div>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="암호를 재입력하세요."
+          value={confirmPwd}
+          onChange={onChangeConfirmPwd}
+          ref={confirmPwdEl}
+        />
+      </div>
+      <div className="input-group">
+        <div className="input-group-prepend">
+          <span className="input-group-text">
+            <Email style={{ width: 24, height: 24 }} />
+          </span>
+        </div>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="이메일을 입력하세요."
+          value={email}
+          onChange={onChangeEmail}
+          ref={emailEl}
+        />
+        <div className="input-group-append">
           <LoadingWrap
-            width={90}
-            height={35}
-            loading={isDbCheckLoading ? 1 : 0}
+            width={100}
+            height={38}
+            loading={isCheckEmailLoading ? 1 : 0}
           >
-            <StyledInput type="button" value="검증" onClick={onCheckEmail} />
+            <input
+              className="btn btn-outline-primary btn-block"
+              type="button"
+              value="검증"
+              onClick={onCheckEmail}
+            />
           </LoadingWrap>
-        </ValidateButtonWrap>
-        {isCheckEmailLoading ? (
-          <LoadingWrap>
-            <ArrowLoading width={20} height={20} />
-          </LoadingWrap>
-        ) : (
-          ""
-        )}
-      </ValidateWrap>
-      <ValidateComment>
+        </div>
+      </div>
+      <sub style={{ color: "red" }}>
         {validateEmail ? "" : "이메일 형식에 맞지 않습니다."}
-      </ValidateComment>
-      {emailToken ? (
-        <p>
-          <StyledInput
-            type="text"
-            autoComplete="off"
-            placeholder="인증번호 4자리를 입력하세요."
-            value={confirmEmailToken}
-            onChange={onChangeConfirmEmailToken}
-            ref={tokenEl}
-          />
-        </p>
-      ) : (
-        ""
-      )}
+      </sub>
+      <div style={{ display: emailToken ? "block" : "none" }}>
+        <input
+          type="number"
+          className="form-control mt-3"
+          placeholder="인증번호를 입력하세요."
+          value={confirmEmailToken}
+          onChange={onChangeConfirmEmailToken}
+          ref={tokenEl}
+        />
+      </div>
+
       <br />
-      <LoadingWrap width={458} height={40} loading={isSignUpLoading ? 1 : 0}>
-        <StyledInput type="submit" value="회원가입" onClick={onSubmit} />
-      </LoadingWrap>
-      <StyledInput type="button" value="취소" onClick={onCancel} />
+      <div className="btn-group d-flex">
+        <LoadingWrap loading={isSignUpLoading ? 1 : 0} style={{ flex: 1 }}>
+          <input
+            className="btn btn-outline-primary btn-block"
+            type="button"
+            value="회원가입"
+            onClick={onSubmit}
+            style={{ zIndex: 1, position: "relative" }}
+          />
+        </LoadingWrap>
+        <LoadingWrap loading={0} style={{ flex: 1 }}>
+          <input
+            className="btn btn-outline-secondary btn-block"
+            type="button"
+            onClick={onCancel}
+            value="취소"
+          />
+        </LoadingWrap>
+      </div>
     </Wrap>
   </Container>
 );
@@ -198,15 +248,21 @@ SignUpPresentation.propTypes = {
     PropTypes.shape({ current: PropTypes.object })
   ]),
   confirmEmailToken: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string,
+  thumbnailEl: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.object })
+  ]),
   isDbCheckLoading: PropTypes.bool.isRequired,
   isCheckEmailLoading: PropTypes.bool.isRequired,
   isSignUpLoading: PropTypes.bool.isRequired,
   onChangeId: PropTypes.func.isRequired,
   onChangePwd: PropTypes.func.isRequired,
   onChangeConfirmPwd: PropTypes.func.isRequired,
-  onChangeName: PropTypes.func.isRequired,
   onChangeEmail: PropTypes.func.isRequired,
   onChangeConfirmEmailToken: PropTypes.func.isRequired,
+  onChangeThumbnail: PropTypes.func.isRequired,
+  onClickThumbnail: PropTypes.func.isRequired,
   onDoubleCheck: PropTypes.func.isRequired,
   onCheckEmail: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

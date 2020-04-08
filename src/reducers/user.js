@@ -27,6 +27,7 @@ export const initialState = {
   isLogInLoading: false, // 로그인 시도 중 여부
   isLogOutLoading: false, // 로그아웃 시도 중 여부
   confirmedId: null, // 현재 중복 확인된 아이디
+  confirmedEmail: null, // 현재 검증된 이메일
   emailToken: null, // 이메일 검증 토큰
   dbCheckErrorReason: "", // 중복 확인 오류 사유
   checkEmailErrorReason: "", // 이메일 체크 오류 사유
@@ -62,7 +63,8 @@ export default (state = initialState, action) =>
       }
       case CHECK_EMAIL_SUCCESS: {
         draft.isCheckEmailLoading = false;
-        draft.emailToken = action.payload;
+        draft.emailToken = action.payload.token;
+        draft.confirmedEmail = action.payload.email;
         break;
       }
       case CHECK_EMAIL_FAILURE: {
@@ -77,6 +79,8 @@ export default (state = initialState, action) =>
       case SIGN_UP_SUCCESS: {
         draft.isSignUpLoading = false;
         draft.emailToken = null;
+        draft.confirmedId = null;
+        draft.confirmEmail = null;
         break;
       }
       case SIGN_UP_FAILURE: {

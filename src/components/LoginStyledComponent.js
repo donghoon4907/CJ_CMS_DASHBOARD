@@ -7,6 +7,11 @@ export const Container = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
+  background-image: radial-gradient(
+    ellipse farthest-corner at center top,
+    #9ab1c7 0%,
+    #1a242f 100%
+  );
 `;
 
 export const Wrap = styled.div`
@@ -17,15 +22,15 @@ export const Wrap = styled.div`
   padding: 20px;
   box-sizing: border-box;
   background: #f8f9fa;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
 `;
 
 export const Title = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
   overflow: hidden;
-  text-align: center;
 `;
 
 export const HelpBar = styled.p`
@@ -38,34 +43,31 @@ export const HelpBar = styled.p`
   }
 `;
 
-export const StyledInput = styled.input`
-  width: 100%;
-  height: 40px;
-  font-size: 20px;
-  padding: 3px;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 2;
-`;
-
 export const LoadingWrap = styled.div`
   position: relative;
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
 
   &:before,
   &:after {
-    display: ${props => (props.loading === 1 ? "block" : "none")};
+    display: ${(props) => (props.loading === 1 ? "block" : "none")};
     content: "";
     position: absolute;
     border-radius: 5px;
-    left: -2px;
-    top: -2px;
-    background: linear-gradient(45deg, white, #5857ff);
+    left: 0;
+    top: 0;
+    background: linear-gradient(90deg, white, #3a7fff);
     background-size: 400%;
-    width: calc(100% + 4px);
-    height: calc(100% + 4px);
-    z-index: 1;
-    animation: ${steam()} 5s linear infinite;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    animation: ${steam()} 3s linear infinite;
   }
+`;
+
+export const ThumbnailWrap = styled.div`
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

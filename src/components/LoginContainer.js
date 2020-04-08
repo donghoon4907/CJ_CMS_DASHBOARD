@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LoginPresentation from "./LoginPresentation";
+import { showToast } from "./module";
 import { SHOW_SIGNUPLAYER_REQUEST } from "../reducers/common";
 import { LOG_IN_REQUEST } from "../reducers/user";
 
@@ -37,7 +38,11 @@ const LoginContainer = () => {
     }
     dispatch({
       type: LOG_IN_REQUEST,
-      payload: { id, pwd }
+      payload: {
+        id,
+        pwd,
+        toast: ({ type, message }) => showToast({ type, message })
+      }
     });
   }, [id, pwd, dispatch]);
 
