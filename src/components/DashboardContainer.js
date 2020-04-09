@@ -1,8 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DashboardPresention from "./DashboardPresention";
 import { LOG_OUT_REQUEST } from "../reducers/user";
 import { showToast } from "./module";
+import { GET_LIST_REQUEST } from "../reducers/post";
+import { SHOW_ADDPOSTMODAL_REQUEST } from "../reducers/common";
 
 const DashboardContainer = () => {
   const dispatch = useDispatch();
@@ -20,11 +22,28 @@ const DashboardContainer = () => {
       });
     }
   }, [dispatch]);
+
+  const onClickAddBtn = useCallback(() => {
+    dispatch({
+      type: SHOW_ADDPOSTMODAL_REQUEST
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch({
+      type: GET_LIST_REQUEST,
+      payload: {
+        lastId: 0,
+        limit: 20
+      }
+    });
+  }, [dispatch]);
   return (
     <DashboardPresention
       userInfo={userInfo}
       activeMenu={activeMenu}
       onClickMenuIcon={onClickMenuIcon}
+      onClickAddBtn={onClickAddBtn}
       onLogout={onLogout}
       asideWidth={80}
     />

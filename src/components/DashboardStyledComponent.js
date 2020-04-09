@@ -49,9 +49,90 @@ export const IconWrap = styled.div`
   ${(props) => props.isProfile === 1 && `position: fixed;bottom: 0;`}
 `;
 
-export const Title = styled.div`
+export const TitleWrap = styled.div`
   color: white;
   font-weight: 500;
   font-size: 40px;
-  width: 500px;
+  width: ${(props) => window.screen.width - props.width - 100}px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  margin-bottom: 30px;
+`;
+
+export const Article = styled.article`
+  width: ${(props) => window.screen.width - props.width - 100}px;
+  height: 80vh;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 80px;
+  padding-right: 80px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  overflow-y: auto;
+  background: ${(props) => props.theme.menuInnerBgColor};
+`;
+
+export const CardWrap = styled.div`
+  width: ${(props) => (window.screen.width - props.width - 400) / 5}px;
+  height: 240px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid white;
+  margin-right: 30px;
+  margin-bottom: 30px;
+
+  & ~ & {
+    margin-right: 30px;
+    margin-bottom: 30px;
+  }
+
+  &:nth-child(5n) {
+    margin-right: 0;
+  }
+`;
+
+const CardItem = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left: 0;
+  width: 100%;
+  border: 1px solid white;
+`;
+
+export const CardHeader = styled(CardItem)`
+  justify-content: space-between;
+  top: 0;
+  height: 30px;
+  padding-right: 5px;
+  padding-left: 5px;
+`;
+export const CardThumbnail = styled(CardItem)`
+  top: 30px;
+  height: 120px;
+`;
+export const CardBody = styled(CardItem)`
+  top: 150px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  padding-right: 5px;
+  padding-left: 5px;
+`;
+export const CardFooter = styled(CardItem)`
+  top: 210px;
+  height: 30px;
+  padding-right: 5px;
+  padding-left: 5px;
+`;
+export const EllipsisText = styled.div`
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 30px;
 `;

@@ -5,9 +5,24 @@ import {
   AsideMenu,
   ContentMenu,
   IconWrap,
-  Title
+  TitleWrap,
+  Article,
+  CardWrap,
+  CardHeader,
+  CardThumbnail,
+  CardBody,
+  CardFooter,
+  EllipsisText
 } from "./DashboardStyledComponent";
-import { Search, Home, Setting } from "../assets/icons";
+import {
+  Post,
+  Home,
+  Setting,
+  FillHeart,
+  EmptyHeart,
+  Add
+} from "../assets/icons";
+import CreatePostModal from "./CreatePostModalContainer";
 import Chart from "./LineChart";
 
 const data = [
@@ -44,6 +59,7 @@ const DashboardPresentation = ({
   userInfo,
   activeMenu,
   onClickMenuIcon,
+  onClickAddBtn,
   onLogout,
   asideWidth
 }) => (
@@ -61,16 +77,28 @@ const DashboardPresentation = ({
         width={asideWidth}
         onClick={() => onClickMenuIcon(2)}
       >
+        <Post style={{ width: 24, height: 24, fill: "white" }} />
+      </IconWrap>
+      <IconWrap
+        active={activeMenu === 3 ? 1 : 0}
+        width={asideWidth}
+        onClick={() => onClickMenuIcon(3)}
+      >
         <Setting style={{ width: 24, height: 24, fill: "white" }} />
       </IconWrap>
       <IconWrap isProfile={1} width={asideWidth}>
         <img
           src={`${process.env.REACT_APP_BACKEND_HOST}/images/${
-            userInfo && userInfo.thumbnail
+            userInfo
+              ? userInfo.thumbnail
+              : process.env.REACT_APP_DEFAULT_THUMBNAIL
           }`}
           width={50}
           height={50}
-          style={{ borderRadius: "50%", border: "2px solid lightgray" }}
+          style={{
+            borderRadius: "50%",
+            border: "2px solid lightgray"
+          }}
           alt={"thumbnail"}
         />
       </IconWrap>
@@ -78,7 +106,10 @@ const DashboardPresentation = ({
     <ContentMenu width={asideWidth}>
       {activeMenu === 1 && (
         <Fragment>
-          <Title>Server Activity</Title>
+          <TitleWrap>
+            <div>Server Activity</div>
+            <div />
+          </TitleWrap>
           <div
             style={{
               position: "relative",
@@ -92,8 +123,48 @@ const DashboardPresentation = ({
           </div>
         </Fragment>
       )}
-      {activeMenu === 2 && <Title>Setting</Title>}
+      {activeMenu === 2 && (
+        <Fragment>
+          <TitleWrap width={asideWidth}>
+            <div>Posting</div>
+            <div>
+              <Add
+                style={{ width: 50, height: 50, fill: "white" }}
+                onClick={onClickAddBtn}
+              />
+            </div>
+          </TitleWrap>
+          <Article width={asideWidth}>
+            {/* <CardWrap width={asideWidth}>
+              <CardHeader>
+                <EmptyHeart style={{ width: 15, height: 15, fill: "white" }} />
+                <div style={{ color: "white" }}>2012-05-23</div>
+              </CardHeader>
+              <CardThumbnail>
+                <img
+                  src={`${process.env.REACT_APP_BACKEND_HOST}/images/${process.env.REACT_APP_DEFAULT_THUMBNAIL}`}
+                  width={"100%"}
+                  height={120}
+                  alt={"thumbnail"}
+                />
+              </CardThumbnail>
+              <CardBody>
+                <EllipsisText></EllipsisText>
+                <EllipsisText></EllipsisText>
+              </CardBody>
+              <CardFooter>test</CardFooter>
+            </CardWrap> */}
+          </Article>
+        </Fragment>
+      )}
+      {activeMenu === 3 && (
+        <TitleWrap>
+          <div>Setting</div>
+          <div />
+        </TitleWrap>
+      )}
     </ContentMenu>
+    <CreatePostModal />
   </Container>
 );
 
@@ -109,5 +180,6 @@ DashboardPresentation.propTypes = {
   }),
   activeMenu: PropTypes.number.isRequired,
   onClickMenuIcon: PropTypes.func.isRequired,
+  onClickAddBtn: PropTypes.func.isRequired,
   onLogout: PropTypes.func.isRequired
 };

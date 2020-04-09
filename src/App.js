@@ -9,7 +9,7 @@ import reducer from "./reducers";
 import saga from "./saga";
 import theme from "./theme";
 import AuthComponent from "./components/AuthComponent";
-import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 
 const GlobalStyle = createGlobalStyle`
