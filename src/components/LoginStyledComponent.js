@@ -66,8 +66,9 @@ export const LoadingWrap = styled.div`
 `;
 
 export const ThumbnailWrap = styled.div`
-  height: 150px;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
 `;

@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DashboardPresention from "./DashboardPresention";
 import { LOG_OUT_REQUEST } from "../reducers/user";
-import { showToast } from "./module";
+import { showToast } from "../module/toast";
 import { GET_LIST_REQUEST } from "../reducers/post";
 import { SHOW_ADDPOSTMODAL_REQUEST } from "../reducers/common";
 
@@ -34,7 +34,8 @@ const DashboardContainer = () => {
       type: GET_LIST_REQUEST,
       payload: {
         lastId: 0,
-        limit: 20
+        limit: 20,
+        toast: ({ type, message }) => showToast({ type, message })
       }
     });
   }, [dispatch]);

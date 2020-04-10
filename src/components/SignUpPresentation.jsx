@@ -49,8 +49,8 @@ const SignUpPresentation = ({
         {thumbnail ? (
           <img
             src={thumbnail}
-            width={200}
-            height={120}
+            width={"100%"}
+            height={200}
             style={{
               border: "1px solid black",
               borderRadius: 20,

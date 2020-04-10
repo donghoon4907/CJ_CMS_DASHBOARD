@@ -21,6 +21,7 @@ import {
   SHOW_LOGINLAYER_REQUEST,
   SHOW_DASHBOARD_REQUEST
 } from "../reducers/common";
+import { axiosErrorHandle } from "../module/error";
 
 function dbcheckAPI(payload) {
   return axios
@@ -80,14 +81,7 @@ function* dbcheck(action) {
     });
     action.payload.toast({ type: "success", message: response.data.message });
   } else if (error) {
-    let message, type;
-    if (error.request.response) {
-      type = "error";
-      message = JSON.parse(error.request.response).message;
-    } else {
-      type = "warn";
-      message = "서버 점검 중입니다. 잠시후 시도하세요.";
-    }
+    const { message, type } = axiosErrorHandle(error);
     yield put({
       type: DOUBLE_CHECK_FAILURE,
       payload: message
@@ -108,14 +102,7 @@ function* emailCheck(action) {
     });
     action.payload.toast({ type: "success", message });
   } else if (error) {
-    let message, type;
-    if (error.request.response) {
-      type = "error";
-      message = JSON.parse(error.request.response).message;
-    } else {
-      type = "warn";
-      message = "서버 점검 중입니다. 잠시후 시도하세요.";
-    }
+    const { message, type } = axiosErrorHandle(error);
     yield put({
       type: CHECK_EMAIL_FAILURE,
       payload: message
@@ -137,14 +124,7 @@ function* signUp(action) {
       type: SHOW_LOGINLAYER_REQUEST
     });
   } else if (error) {
-    let message, type;
-    if (error.request.response) {
-      type = "error";
-      message = JSON.parse(error.request.response).message;
-    } else {
-      type = "warn";
-      message = "서버 점검 중입니다. 잠시후 시도하세요.";
-    }
+    const { message, type } = axiosErrorHandle(error);
     yield put({
       type: SIGN_UP_FAILURE,
       payload: message
@@ -170,14 +150,7 @@ function* logIn(action) {
       message: `${response.data.userId}님 반갑습니다.`
     });
   } else if (error) {
-    let message, type;
-    if (error.request.response) {
-      type = "error";
-      message = JSON.parse(error.request.response).message;
-    } else {
-      type = "warn";
-      message = "서버 점검 중입니다. 잠시후 시도하세요.";
-    }
+    const { message, type } = axiosErrorHandle(error);
     yield put({
       type: LOG_IN_FAILURE,
       payload: message
@@ -198,13 +171,13 @@ function* logOut(action) {
       type: SHOW_LOGINLAYER_REQUEST
     });
   } else if (error) {
-    const message = "서버 점검 중입니다. 잠시후 시도하세요.";
+    const { message, type } = axiosErrorHandle(error);
     yield put({
       type: LOG_OUT_FAILURE,
       payload: message
     });
     action.payload.toast({
-      type: "warn",
+      type,
       message
     });
   }

@@ -90,7 +90,7 @@ const DashboardPresentation = ({
         <img
           src={`${process.env.REACT_APP_BACKEND_HOST}/images/${
             userInfo
-              ? userInfo.thumbnail
+              ? userInfo.Images && userInfo.Images[0].src
               : process.env.REACT_APP_DEFAULT_THUMBNAIL
           }`}
           width={50}
@@ -174,9 +174,13 @@ DashboardPresentation.propTypes = {
   userInfo: PropTypes.shape({
     id: PropTypes.number.isRequired,
     userId: PropTypes.string.isRequired,
-    name: PropTypes.string,
+    name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired
+    Images: PropTypes.arrayOf(
+      PropTypes.shape({
+        src: PropTypes.string.isRequired
+      })
+    )
   }),
   activeMenu: PropTypes.number.isRequired,
   onClickMenuIcon: PropTypes.func.isRequired,

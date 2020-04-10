@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SignUpPresentation from "./SignUpPresentation";
-import { showToast } from "./module";
+import { showToast } from "../module/toast";
 import { SHOW_LOGINLAYER_REQUEST } from "../reducers/common";
 import {
   DOUBLE_CHECK_REQUEST,
