@@ -1,5 +1,16 @@
 import React from "react";
 
+export const Loading = ({ style, onClick }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    style={style}
+    onClick={onClick}
+    viewBox="0 0 24 24"
+  >
+    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm8 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zm-19 0c0-6.065 4.935-11 11-11v2c-4.962 0-9 4.038-9 9 0 2.481 1.009 4.731 2.639 6.361l-1.414 1.414.015.014c-2-1.994-3.24-4.749-3.24-7.789z" />
+  </svg>
+);
+
 export const ArrowLoading = ({ style, onClick }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -145,5 +156,16 @@ export const Image = ({ style, onClick }) => (
     viewBox="0 0 24 24"
   >
     <path d="M5 8.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5zm9 .5l-2.519 4-2.481-1.96-4 5.96h14l-5-8zm8-4v14h-20v-14h20zm2-2h-24v18h24v-18z" />
+  </svg>
+);
+
+export const Publish = ({ style, onClick }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    style={style}
+    onClick={onClick}
+    viewBox="0 0 24 24"
+  >
+    <path d="M24 0l-6 22-8.129-7.239 7.802-8.234-10.458 7.227-7.215-1.754 24-12zm-15 16.668v7.332l3.258-4.431-3.258-2.901z" />
   </svg>
 );

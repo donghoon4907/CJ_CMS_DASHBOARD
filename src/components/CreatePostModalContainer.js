@@ -1,23 +1,22 @@
 import React, { useCallback, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import CreatePostModalPresentaion from "./CreatePostModalPresentation";
 import { HIDE_ADDPOSTMODAL_REQUEST } from "../reducers/common";
-import { ADD_ITEM_REQUEST } from "../reducers/post";
+import { ADD_POSTITEM_REQUEST } from "../reducers/post";
 import { showToast } from "../module/toast";
 
 const CreatePostModalContainer = () => {
   const dispatch = useDispatch();
-  const { is_show_addpost_ui: isShow } = useSelector((state) => state.common);
 
   const titleEl = useRef(null);
   const descriptionEl = useRef(null);
   const thumbnailEl = useRef(null);
 
-  const [title, setTitle] = useState(""); // 제목
-  const [description, setDescription] = useState(""); // 내용
-  const [tags, setTags] = useState([]); // 태그
-  const [thumbnail, setThumbnail] = useState(""); // 미리보기
-  const [selectedFile, setSelectedFile] = useState(null); // 파일 데이터
+  const [title, setTitle] = useState(""); // 포스트 제목
+  const [description, setDescription] = useState(""); // 포스트 내용
+  const [tags, setTags] = useState([]); // 포스트 태그
+  const [thumbnail, setThumbnail] = useState(""); // 썸네일 미리보기
+  const [selectedFile, setSelectedFile] = useState(null); // 썸네일 파일 데이터
 
   // 모달 끄기
   const onHide = useCallback(() => {
@@ -26,18 +25,19 @@ const CreatePostModalContainer = () => {
     });
   }, [dispatch]);
 
-  const onChangeTitle = useCallback((e) => {
+  const onChangeTitle = useCallback(e => {
     setTitle(e.target.value);
   }, []);
 
-  const onChangeDescription = useCallback((e) => {
+  const onChangeDescription = useCallback(e => {
     setDescription(e.target.value);
   }, []);
+
   const onClickThumbnail = useCallback(() => {
     thumbnailEl.current.click();
   }, []);
 
-  const onChangeThumbnail = useCallback((e) => {
+  const onChangeThumbnail = useCallback(e => {
     // 파일 선택창에서 취소 버튼을 누른 경우
     if (!e.target.value) return;
     const reader = new FileReader();
@@ -50,7 +50,7 @@ const CreatePostModalContainer = () => {
 
     reader.readAsDataURL(file);
   }, []);
-
+  // 포스트 등록
   const onSubmit = useCallback(() => {
     if (!title) {
       alert("제목을 입력하세요.");
@@ -68,7 +68,7 @@ const CreatePostModalContainer = () => {
       return;
     }
     dispatch({
-      type: ADD_ITEM_REQUEST,
+      type: ADD_POSTITEM_REQUEST,
       payload: {
         title,
         description,
@@ -89,7 +89,6 @@ const CreatePostModalContainer = () => {
       setTags={setTags}
       thumbnail={thumbnail}
       thumbnailEl={thumbnailEl}
-      isShow={isShow}
       onHide={onHide}
       onClickThumbnail={onClickThumbnail}
       onChangeTitle={onChangeTitle}

@@ -45,12 +45,12 @@ export const HelpBar = styled.p`
 
 export const LoadingWrap = styled.div`
   position: relative;
-  width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
 
   &:before,
   &:after {
-    display: ${(props) => (props.loading === 1 ? "block" : "none")};
+    display: ${props => (props.loading === 1 ? "block" : "none")};
     content: "";
     position: absolute;
     border-radius: 5px;
@@ -71,4 +71,12 @@ export const ThumbnailWrap = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 15px;
+`;
+
+export const Thumbnail = styled.img`
+  width: 100%;
+  height: ${props => props.height}px;
+  border: ${props => props.theme.borderColor};
+  cursor: pointer;
+  border-radius: 5px;
 `;

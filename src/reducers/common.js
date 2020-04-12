@@ -9,15 +9,20 @@ export const SHOW_SIGNUPLAYER_REQUEST = "SHOW_SIGNUPLAYER_REQUEST";
 export const SHOW_ADDPOSTMODAL_REQUEST = "SHOW_ADDPOSTMODAL_REQUEST";
 // 포스트 추가 모달 숨기기
 export const HIDE_ADDPOSTMODAL_REQUEST = "HIDE_ADDPOSTMODAL_REQUEST";
+// 프로그램 추가 모달 보이기
+export const SHOW_ADDPROGRAMMODAL_REQUEST = "SHOW_ADDPROGRAMMODAL_REQUEST";
+// 프로그램 추가 모달 숨기기
+export const HIDE_ADDPROGRAMMODAL_REQUEST = "HIDE_ADDPROGRAMMODAL_REQUEST";
 
 export const initialState = {
-  is_show_login_ui: true, // 로그인 화면 보이기 유무
+  is_show_login_ui: false, // 로그인 화면 보이기 유무
   is_show_signup_ui: false, // 회원가입 화면 보이기 유무
-  is_show_addpost_ui: false // 포스트 추가 화면 보이기 유무
+  is_show_addpost_ui: false, // 포스트 추가 화면 보이기 유무
+  is_show_addprogram_ui: false // 프로그램 추가 화면 보이기 유무
 };
 
 export default (state = initialState, action) =>
-  produce(state, (draft) => {
+  produce(state, draft => {
     switch (action.type) {
       case SHOW_LOGINLAYER_REQUEST: {
         draft.is_show_login_ui = true;
@@ -40,6 +45,14 @@ export default (state = initialState, action) =>
       }
       case HIDE_ADDPOSTMODAL_REQUEST: {
         draft.is_show_addpost_ui = false;
+        break;
+      }
+      case SHOW_ADDPROGRAMMODAL_REQUEST: {
+        draft.is_show_addprogram_ui = true;
+        break;
+      }
+      case HIDE_ADDPROGRAMMODAL_REQUEST: {
+        draft.is_show_addprogram_ui = false;
         break;
       }
       default:

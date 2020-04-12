@@ -1,8 +1,14 @@
-export const axiosErrorHandle = (error) => {
-  let message, type;
+export const axiosErrorHandle = error => {
+  let message,
+    type,
+    isExpired = false;
   if (error.request.status === 0) {
     type = "warn";
     message = "서버 점검 중입니다. 잠시후 시도하세요.";
+  } else if (error.request.status === 301) {
+    type = "info";
+    message = JSON.parse(error.request.response).message;
+    isExpired = true;
   } else if (error.request.status === 404) {
     type = "warn";
     message = "잘못된 경로로 접근했습니다. 담당자에게 문의하세요.";
@@ -16,5 +22,5 @@ export const axiosErrorHandle = (error) => {
     type = "error";
     message = JSON.parse(error.request.response).message;
   }
-  return { type, message };
+  return { type, message, isExpired };
 };

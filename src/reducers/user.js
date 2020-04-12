@@ -19,6 +19,10 @@ export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
 export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
 export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
 export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
+// 사용자 정보 로드
+export const LOAD_USER_REQUEST = "LOAD_USER_REQUEST";
+export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
+export const LOAD_USER_FAILURE = "LOAD_USER_FAILURE";
 
 export const initialState = {
   isDbCheckLoading: false, // 중복 확인 시도 중 여부
@@ -26,6 +30,7 @@ export const initialState = {
   isSignUpLoading: false, // 회원가입 시도 중 여부
   isLogInLoading: false, // 로그인 시도 중 여부
   isLogOutLoading: false, // 로그아웃 시도 중 여부
+  isLoadUserLoading: false, // 사용자 정보 로드 시도 중 여부
   confirmedId: null, // 현재 중복 확인된 아이디
   confirmedEmail: null, // 현재 검증된 이메일
   emailToken: null, // 이메일 검증 토큰
@@ -34,6 +39,7 @@ export const initialState = {
   signUpErrorReason: "", // 회원가입 요청 오류 사유
   logInErrorReason: "", // 로그인 요청 오류 사유
   logOutErrorReason: "", // 로그아웃 요청 오류 사유
+  loadUserErrorReason: "", // 사용자 정보 로드 요청 오류 사유
   userInfo: null // 로그인한 유저 정보
 };
 
@@ -114,6 +120,20 @@ export default (state = initialState, action) =>
       case LOG_OUT_FAILURE: {
         draft.isLogOutLoading = false;
         draft.logOutErrorReason = action.payload;
+        break;
+      }
+      case LOAD_USER_REQUEST: {
+        draft.isLoadUserLoading = true;
+        break;
+      }
+      case LOAD_USER_SUCCESS: {
+        draft.isLoadUserLoading = false;
+        draft.userInfo = action.payload;
+        break;
+      }
+      case LOAD_USER_FAILURE: {
+        draft.isLoadUserLoading = false;
+        draft.loadUserErrorReason = action.payload;
         break;
       }
       default:

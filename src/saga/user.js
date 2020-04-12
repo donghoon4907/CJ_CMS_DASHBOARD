@@ -1,4 +1,11 @@
-import { all, fork, takeEvery, call, put } from "redux-saga/effects";
+import {
+  all,
+  fork,
+  takeEvery,
+  takeLatest,
+  call,
+  put
+} from "redux-saga/effects";
 import axios from "axios";
 import {
   DOUBLE_CHECK_REQUEST,
@@ -15,25 +22,29 @@ import {
   LOG_IN_FAILURE,
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
-  LOG_OUT_FAILURE
+  LOG_OUT_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE
 } from "../reducers/user";
 import {
   SHOW_LOGINLAYER_REQUEST,
   SHOW_DASHBOARD_REQUEST
 } from "../reducers/common";
 import { axiosErrorHandle } from "../module/error";
+import { showToast } from "../module/toast";
 
 function dbcheckAPI(payload) {
   return axios
     .post("/user/check", payload)
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function checkEmailAPI(payload) {
   return axios
     .post("/user/email", payload)
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function signUpAPI(payload) {
   const { id, pwd, name, email, selectedFile } = payload;
@@ -49,16 +60,16 @@ function signUpAPI(payload) {
 
   return axios
     .post("/user/add", formData)
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function logInAPI(payload) {
   return axios
     .post("/user/login", payload, {
       withCredentials: true
     })
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function logOutAPI() {
   return axios
@@ -69,8 +80,20 @@ function logOutAPI() {
         withCredentials: true
       }
     )
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
+}
+function loadUserAPI() {
+  return axios
+    .post(
+      "/user/loadUser",
+      {},
+      {
+        withCredentials: true
+      }
+    )
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function* dbcheck(action) {
   const { response, error } = yield call(dbcheckAPI, action.payload);
@@ -79,14 +102,14 @@ function* dbcheck(action) {
       type: DOUBLE_CHECK_SUCCESS,
       payload: action.payload.id
     });
-    action.payload.toast({ type: "success", message: response.data.message });
+    showToast({ type: "success", message: response.data.message });
   } else if (error) {
     const { message, type } = axiosErrorHandle(error);
     yield put({
       type: DOUBLE_CHECK_FAILURE,
       payload: message
     });
-    action.payload.toast({
+    showToast({
       type,
       message
     });
@@ -100,14 +123,14 @@ function* emailCheck(action) {
       type: CHECK_EMAIL_SUCCESS,
       payload: { token, email: action.payload.email }
     });
-    action.payload.toast({ type: "success", message });
+    showToast({ type: "success", message });
   } else if (error) {
     const { message, type } = axiosErrorHandle(error);
     yield put({
       type: CHECK_EMAIL_FAILURE,
       payload: message
     });
-    action.payload.toast({
+    showToast({
       type,
       message
     });
@@ -119,7 +142,7 @@ function* signUp(action) {
     yield put({
       type: SIGN_UP_SUCCESS
     });
-    action.payload.toast({ type: "success", message: response.data.message });
+    showToast({ type: "success", message: response.data.message });
     yield put({
       type: SHOW_LOGINLAYER_REQUEST
     });
@@ -129,7 +152,7 @@ function* signUp(action) {
       type: SIGN_UP_FAILURE,
       payload: message
     });
-    action.payload.toast({
+    showToast({
       type,
       message
     });
@@ -145,7 +168,7 @@ function* logIn(action) {
     yield put({
       type: SHOW_DASHBOARD_REQUEST
     });
-    action.payload.toast({
+    showToast({
       type: "success",
       message: `${response.data.userId}님 반갑습니다.`
     });
@@ -155,7 +178,7 @@ function* logIn(action) {
       type: LOG_IN_FAILURE,
       payload: message
     });
-    action.payload.toast({
+    showToast({
       type,
       message
     });
@@ -176,7 +199,36 @@ function* logOut(action) {
       type: LOG_OUT_FAILURE,
       payload: message
     });
-    action.payload.toast({
+    showToast({
+      type,
+      message
+    });
+  }
+}
+function* loadUser(action) {
+  const { response, error } = yield call(loadUserAPI);
+  if (response) {
+    yield put({
+      type: LOAD_USER_SUCCESS,
+      payload: response.data
+    });
+    yield put({
+      type: SHOW_DASHBOARD_REQUEST
+    });
+    showToast({
+      type: "success",
+      message: `${response.data.userId}님 반갑습니다.`
+    });
+  } else if (error) {
+    const { message, type } = axiosErrorHandle(error);
+    yield put({
+      type: LOAD_USER_FAILURE,
+      payload: message
+    });
+    yield put({
+      type: SHOW_LOGINLAYER_REQUEST
+    });
+    showToast({
       type,
       message
     });
@@ -194,7 +246,7 @@ function* watchCheckEmail() {
 function* watchSignUp() {
   yield takeEvery(SIGN_UP_REQUEST, signUp);
 }
-//로그인
+// 로그인
 function* watchLogIn() {
   yield takeEvery(LOG_IN_REQUEST, logIn);
 }
@@ -202,12 +254,17 @@ function* watchLogIn() {
 function* watchLogOut() {
   yield takeEvery(LOG_OUT_REQUEST, logOut);
 }
-export default function* () {
+// 사용자 정보 로드
+function* watchLoadUser() {
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
+export default function*() {
   yield all([
     fork(watchDbCheck),
     fork(watchCheckEmail),
     fork(watchSignUp),
     fork(watchLogIn),
-    fork(watchLogOut)
+    fork(watchLogOut),
+    fork(watchLoadUser)
   ]);
 }

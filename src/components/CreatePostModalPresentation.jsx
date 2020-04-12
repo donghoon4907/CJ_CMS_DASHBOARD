@@ -3,6 +3,7 @@ import { Button, Modal, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 import HashTagComponent from "./HashTagComponent";
 import { Image } from "../assets/icons";
+import { Thumbnail } from "./LoginStyledComponent";
 
 const CreatePostModalPresentaion = ({
   title,
@@ -13,7 +14,6 @@ const CreatePostModalPresentaion = ({
   setTags,
   thumbnail,
   thumbnailEl,
-  isShow,
   onHide,
   onClickThumbnail,
   onChangeTitle,
@@ -21,25 +21,21 @@ const CreatePostModalPresentaion = ({
   onChangeThumbnail,
   onSubmit
 }) => (
-  <Modal show={isShow} onHide={onHide} animation={true} size="lg">
+  <Modal show={true} onHide={onHide} animation={true} size="lg">
     <Modal.Header closeButton>
-      <Modal.Title>등록</Modal.Title>
+      <Modal.Title>포스트 등록</Modal.Title>
     </Modal.Header>
-    <Modal.Body style={{ height: "78vh", overflowY: "auto" }}>
+    <Modal.Body
+      style={{ maxHeight: window.innerHeight - 200, overflowY: "auto" }}
+    >
       <Form>
         <Form.Group>
           <Form.Label>썸네일</Form.Label>
           <br />
           {thumbnail ? (
-            <img
+            <Thumbnail
               src={thumbnail}
-              width={"100%"}
               height={250}
-              style={{
-                cursor: "pointer",
-                border: "1px solid #DEE2E6",
-                borderRadius: 5
-              }}
               onClick={onClickThumbnail}
               alt={"thumbnail"}
             />
@@ -123,13 +119,16 @@ CreatePostModalPresentaion.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object })
   ]),
+  tags: PropTypes.array.isRequired,
+  setTags: PropTypes.func.isRequired,
   thumbnail: PropTypes.string,
   thumbnailEl: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object })
   ]),
+  onHide: PropTypes.func.isRequired,
+  onClickThumbnail: PropTypes.func.isRequired,
   onChangeTitle: PropTypes.func.isRequired,
   onChangeDescription: PropTypes.func.isRequired,
-  onHide: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired
 };

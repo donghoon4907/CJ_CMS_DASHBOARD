@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SignUpPresentation from "./SignUpPresentation";
-import { showToast } from "../module/toast";
 import { SHOW_LOGINLAYER_REQUEST } from "../reducers/common";
 import {
   DOUBLE_CHECK_REQUEST,
@@ -26,7 +25,7 @@ const SignUpContainer = () => {
     confirmedId,
     emailToken,
     confirmedEmail
-  } = useSelector((state) => state.user);
+  } = useSelector(state => state.user);
   const [id, setId] = useState(""); // 아이디
   const [pwd, setPwd] = useState(""); // 암호
   const [confirmPwd, setConfirmPwd] = useState(""); // 암호 확인
@@ -37,7 +36,7 @@ const SignUpContainer = () => {
   const [thumbnail, setThumbnail] = useState(""); // 미리보기
   const [selectedFile, setSelectedFile] = useState(null); // 파일 데이터
 
-  const onChangeId = useCallback((e) => {
+  const onChangeId = useCallback(e => {
     const isValidate = validateText(e.target.value, {
       isNotAllowBlank: true,
       isNotAllowSpecial: true,
@@ -48,16 +47,16 @@ const SignUpContainer = () => {
     }
   }, []);
 
-  const onChangePwd = useCallback((e) => setPwd(e.target.value), []);
+  const onChangePwd = useCallback(e => setPwd(e.target.value), []);
 
   const onChangeConfirmPwd = useCallback(
-    (e) => setConfirmPwd(e.target.value),
+    e => setConfirmPwd(e.target.value),
     []
   );
 
-  const onChangeName = useCallback((e) => setName(e.target.value), []);
+  const onChangeName = useCallback(e => setName(e.target.value), []);
 
-  const onChangeEmail = useCallback((e) => {
+  const onChangeEmail = useCallback(e => {
     setEmail(e.target.value);
     const isValidate = validateText(e.target.value, {
       isEmail: true
@@ -69,11 +68,11 @@ const SignUpContainer = () => {
     }
   }, []);
 
-  const onChangeConfirmEmailToken = useCallback((e) => {
+  const onChangeConfirmEmailToken = useCallback(e => {
     setConfirmEmailToken(e.target.value);
   }, []);
 
-  const onChangeThumbnail = useCallback((e) => {
+  const onChangeThumbnail = useCallback(e => {
     // 파일 선택창에서 취소 버튼을 누른 경우
     if (!e.target.value) return;
     const reader = new FileReader();
@@ -100,8 +99,7 @@ const SignUpContainer = () => {
       dispatch({
         type: DOUBLE_CHECK_REQUEST,
         payload: {
-          id,
-          toast: ({ type, message }) => showToast({ type, message })
+          id
         }
       });
     }
@@ -121,8 +119,7 @@ const SignUpContainer = () => {
       dispatch({
         type: CHECK_EMAIL_REQUEST,
         payload: {
-          email,
-          toast: ({ type, message }) => showToast({ type, message })
+          email
         }
       });
     }
@@ -186,8 +183,7 @@ const SignUpContainer = () => {
         pwd,
         name,
         email,
-        selectedFile,
-        toast: ({ type, message }) => showToast({ type, message })
+        selectedFile
       }
     });
   }, [

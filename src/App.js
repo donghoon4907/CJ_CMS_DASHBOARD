@@ -10,6 +10,7 @@ import saga from "./saga";
 import theme from "./theme";
 import AuthComponent from "./components/AuthComponent";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-datepicker/dist/react-datepicker.min.css";
 import "react-toastify/dist/ReactToastify.css";
 
 const GlobalStyle = createGlobalStyle`

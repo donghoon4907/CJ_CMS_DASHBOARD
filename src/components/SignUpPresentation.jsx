@@ -5,7 +5,8 @@ import {
   Wrap,
   Title,
   LoadingWrap,
-  ThumbnailWrap
+  ThumbnailWrap,
+  Thumbnail
 } from "./LoginStyledComponent";
 import { Account, Password, Email } from "../assets/icons";
 
@@ -47,15 +48,9 @@ const SignUpPresentation = ({
       <Title>➤ 회원가입</Title>
       <ThumbnailWrap>
         {thumbnail ? (
-          <img
+          <Thumbnail
             src={thumbnail}
-            width={"100%"}
             height={200}
-            style={{
-              border: "1px solid black",
-              borderRadius: 20,
-              cursor: "pointer"
-            }}
             onClick={onClickThumbnail}
             alt={"thumbnail"}
           />

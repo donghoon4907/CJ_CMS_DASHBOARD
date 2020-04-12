@@ -8,7 +8,36 @@ import {
   Tooltip,
   Legend
 } from "recharts";
-
+const data = [
+  {
+    name: "04-07",
+    request: 4000
+  },
+  {
+    name: "04-08",
+    request: 3000
+  },
+  {
+    name: "04-09",
+    request: 2000
+  },
+  {
+    name: "04-10",
+    request: 2780
+  },
+  {
+    name: "04-11",
+    request: 1890
+  },
+  {
+    name: "04-12",
+    request: 2390
+  },
+  {
+    name: "04-13",
+    request: 3490
+  }
+];
 export default class Example extends PureComponent {
   static jsfiddleUrl = "https://jsfiddle.net/alidingling/xqjtetw0/";
   render() {
