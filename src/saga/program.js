@@ -15,7 +15,10 @@ import {
   GET_DETAILGENRELIST_FAILURE,
   GET_AGEGRADELIST_REQUEST,
   GET_AGEGRADELIST_SUCCESS,
-  GET_AGEGRADELIST_FAILURE
+  GET_AGEGRADELIST_FAILURE,
+  GET_CHANNELLIST_REQUEST,
+  GET_CHANNELLIST_SUCCESS,
+  GET_CHANNELLIST_FAILURE
 } from "../reducers/program";
 import {
   SHOW_LOGINLAYER_REQUEST,
@@ -28,8 +31,8 @@ import { showToast } from "../module/toast";
 function getListAPI({ lastId = 0, limit = 20 }) {
   return axios
     .get(`/program/list?lastId=${lastId}&limit=${limit}`)
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function addItemAPI(payload) {
   const {
@@ -39,7 +42,8 @@ function addItemAPI(payload) {
     prdtYear,
     genre,
     detailGenre,
-    ageGrade
+    ageGrade,
+    channel
   } = payload;
 
   const formData = new FormData();
@@ -48,6 +52,7 @@ function addItemAPI(payload) {
   formData.append("genre", genre);
   formData.append("detailgenre", detailGenre);
   formData.append("agegrade", ageGrade);
+  formData.append("channel", channel);
   if (description) {
     formData.append("description", description);
   }
@@ -59,26 +64,32 @@ function addItemAPI(payload) {
     .post("/program/add", formData, {
       withCredentials: true
     })
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function getGenreListAPI() {
   return axios
     .get("/program/genre")
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function getDetailGenreListAPI({ id }) {
   return axios
     .get(`/program/detailgenre?id=${id}`)
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function getAgeGradeListAPI() {
   return axios
     .get("/program/agegrade")
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
+}
+function getChannelListAPI() {
+  return axios
+    .get("/program/channel")
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function* getList(action) {
   const { response, error } = yield call(getListAPI, action.payload);
@@ -201,6 +212,25 @@ function* getAgeGradeList(action) {
     });
   }
 }
+function* getChannelList(action) {
+  const { response, error } = yield call(getChannelListAPI);
+  if (response) {
+    yield put({
+      type: GET_CHANNELLIST_SUCCESS,
+      payload: response.data
+    });
+  } else if (error) {
+    const { message, type } = axiosErrorHandle(error);
+    yield put({
+      type: GET_CHANNELLIST_FAILURE,
+      payload: message
+    });
+    showToast({
+      type,
+      message
+    });
+  }
+}
 // 목록 로드
 function* watchGetList() {
   yield takeEvery(GET_PROGRAMLIST_REQUEST, getList);
@@ -221,12 +251,17 @@ function* watchGetDetailGenreList() {
 function* watchGetAgeGradeList() {
   yield takeEvery(GET_AGEGRADELIST_REQUEST, getAgeGradeList);
 }
-export default function*() {
+// 채널 목록 로드
+function* watchGetChannelList() {
+  yield takeEvery(GET_CHANNELLIST_REQUEST, getChannelList);
+}
+export default function* () {
   yield all([
     fork(watchGetList),
     fork(watchAddItem),
     fork(watchGetGenreList),
     fork(watchGetDetailGenreList),
-    fork(watchGetAgeGradeList)
+    fork(watchGetAgeGradeList),
+    fork(watchGetChannelList)
   ]);
 }

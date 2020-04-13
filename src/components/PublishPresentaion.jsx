@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { InputGroup, FormControl, Form, Button } from "react-bootstrap";
+import { InputGroup, FormControl, Form } from "react-bootstrap";
 import {
   SubMenu,
   SubMenuItem,
@@ -9,22 +9,36 @@ import {
   SearchBar,
   Field,
   ListWrap,
-  StyledDatePicker
+  StyledDatePicker,
+  StyledButton,
+  CardWrap,
+  CardHeader,
+  CardThumbnail,
+  CardBody,
+  CardFooter,
+  EllipsisText
 } from "./PublishStyledComponent";
-import styled from "styled-components";
-
-const StyledButton = styled(Button)`
-  background: #3ea9f1;
-`;
 
 const PublishPresentaion = ({
   loadedPost,
   loadedProgram,
   activeMenu,
-  startDate,
-  endDate,
-  setStartDate,
-  setEndDate,
+  pgmStartDate,
+  postStartDate,
+  pgmEndDate,
+  postEndDate,
+  setPgmStartDate,
+  setPostStartDate,
+  setPgmEndDate,
+  setPostEndDate,
+  pgmSearchKeyword,
+  postSearchKeyword,
+  pgmSort,
+  postSort,
+  onChangePgmSearchKeyword,
+  onChangePostSearchKeyword,
+  onChangePgmSort,
+  onChangePostSort,
   onClickSubMenuItem,
   onClickAddPostBtn,
   onClickAddProgramBtn
@@ -45,19 +59,19 @@ const PublishPresentaion = ({
       </SubMenuItem>
     </SubMenu>
     <Article>
-      <WorkWrap>
+      <WorkWrap active={activeMenu === 1 && 1}>
         <SearchBar>
           <Field flex={3}>
             <div className="mr-3 d-flex align-items-center">등록일</div>
             <div>
               <StyledDatePicker
                 className="form-control"
-                selected={startDate}
-                onChange={date => setStartDate(date)}
+                selected={pgmStartDate}
+                onChange={(date) => setPgmStartDate(date)}
                 selectsStart
                 isClearable
-                startDate={startDate}
-                endDate={endDate}
+                startDate={pgmStartDate}
+                endDate={pgmEndDate}
                 placeholderText="입력하세요."
                 dateFormat="yyyy-MM-dd"
               />
@@ -66,12 +80,12 @@ const PublishPresentaion = ({
             <div>
               <StyledDatePicker
                 className="form-control"
-                selected={endDate}
-                onChange={date => setEndDate(date)}
+                selected={pgmEndDate}
+                onChange={(date) => setPgmEndDate(date)}
                 selectsEnd
                 isClearable
-                startDate={startDate}
-                endDate={endDate}
+                startDate={pgmStartDate}
+                endDate={pgmEndDate}
                 placeholderText="입력하세요."
                 dateFormat="yyyy-MM-dd"
               />
@@ -79,7 +93,11 @@ const PublishPresentaion = ({
           </Field>
           <Field flex={1}>
             <InputGroup>
-              <FormControl placeholder="검색어를 입력하세요." />
+              <FormControl
+                placeholder="검색어를 입력하세요."
+                value={pgmSearchKeyword}
+                onChange={onChangePgmSearchKeyword}
+              />
               <InputGroup.Prepend>
                 <InputGroup.Text
                   style={{
@@ -95,23 +113,133 @@ const PublishPresentaion = ({
         </SearchBar>
         <SearchBar>
           <Field flex={8}>
-            {activeMenu === 1 && (
-              <StyledButton onClick={onClickAddProgramBtn}>
-                프로그램 등록
-              </StyledButton>
-            )}
-            {activeMenu === 2 && (
-              <StyledButton onClick={onClickAddPostBtn}>
-                프스트 등록
-              </StyledButton>
-            )}
+            <StyledButton onClick={onClickAddProgramBtn}>
+              프로그램 등록
+            </StyledButton>
           </Field>
           <Field flex={1}>
-            <Form.Control as="select">
-              <option selected>등록일 순</option>
-              <option>등록일 역순</option>
-              <option>수정일 순</option>
-              <option>수정일 역순</option>
+            <Form.Control
+              as="select"
+              value={pgmSort}
+              onChange={onChangePgmSort}
+            >
+              <option value="createdAt,DESC">등록일 순</option>
+              <option value="createdAt,ASC">등록일 역순</option>
+              <option value="updatedAt,DESC">수정일 순</option>
+              <option value="updatedAt,ASC">수정일 역순</option>
+            </Form.Control>
+          </Field>
+        </SearchBar>
+        <ListWrap className="p-3">
+          {loadedProgram &&
+            loadedProgram.map(
+              ({
+                id,
+                title,
+                description,
+                createdAt,
+                Images,
+                Channel,
+                Contents
+              }) => (
+                <CardWrap key={id}>
+                  <CardHeader>
+                    <div>
+                      <img
+                        width={40}
+                        height={20}
+                        src={`${process.env.REACT_APP_BACKEND_HOST}/images/${Channel.Images[0].src}`}
+                        alt={"logo"}
+                      />
+                    </div>
+                    <div title={createdAt}>{createdAt.substring(0, 10)}</div>
+                  </CardHeader>
+                  <CardThumbnail>
+                    <img
+                      src={`${process.env.REACT_APP_BACKEND_HOST}/images/${Images[0].src}`}
+                      width={"100%"}
+                      height={"100%"}
+                      alt={"thumbnail"}
+                    />
+                  </CardThumbnail>
+                  <CardBody>
+                    <EllipsisText>{title}</EllipsisText>
+                    <EllipsisText>{description}</EllipsisText>
+                  </CardBody>
+                  <CardFooter>
+                    <div>총 화수 : {Contents.length}</div>
+                  </CardFooter>
+                </CardWrap>
+              )
+            )}
+        </ListWrap>
+      </WorkWrap>
+      <WorkWrap active={activeMenu === 2 && 1}>
+        <SearchBar>
+          <Field flex={3}>
+            <div className="mr-3 d-flex align-items-center">등록일</div>
+            <div>
+              <StyledDatePicker
+                className="form-control"
+                selected={postStartDate}
+                onChange={(date) => setPostStartDate(date)}
+                selectsStart
+                isClearable
+                startDate={postStartDate}
+                endDate={postEndDate}
+                placeholderText="입력하세요."
+                dateFormat="yyyy-MM-dd"
+              />
+            </div>
+            <div className="d-flex align-items-center ml-2 mr-2">~</div>
+            <div>
+              <StyledDatePicker
+                className="form-control"
+                selected={postEndDate}
+                onChange={(date) => setPostEndDate(date)}
+                selectsEnd
+                isClearable
+                startDate={postStartDate}
+                endDate={postEndDate}
+                placeholderText="입력하세요."
+                dateFormat="yyyy-MM-dd"
+              />
+            </div>
+          </Field>
+          <Field flex={1}>
+            <InputGroup>
+              <FormControl
+                placeholder="검색어를 입력하세요."
+                value={postSearchKeyword}
+                onChange={onChangePostSearchKeyword}
+              />
+              <InputGroup.Prepend>
+                <InputGroup.Text
+                  style={{
+                    borderTopRightRadius: 5,
+                    borderBottomRightRadius: 5
+                  }}
+                >
+                  검색
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+            </InputGroup>
+          </Field>
+        </SearchBar>
+        <SearchBar>
+          <Field flex={8}>
+            <StyledButton onClick={onClickAddPostBtn}>프스트 등록</StyledButton>
+          </Field>
+          <Field flex={1}>
+            <Form.Control
+              as="select"
+              value={postSort}
+              onChange={onChangePostSort}
+            >
+              <option value="createdAt,DESC">등록일 순</option>
+              <option value="createdAt,ASC">등록일 역순</option>
+              <option value="updatedAt,DESC">수정일 순</option>
+              <option value="updatedAt,ASC">수정일 역순</option>
             </Form.Control>
           </Field>
         </SearchBar>
@@ -126,10 +254,22 @@ PublishPresentaion.propTypes = {
   loadedPost: PropTypes.arrayOf(PropTypes.shape({})),
   // loadedProgram,
   activeMenu: PropTypes.number.isRequired,
-  startDate: PropTypes.object.isRequired,
-  endDate: PropTypes.object.isRequired,
-  setStartDate: PropTypes.func.isRequired,
-  setEndDate: PropTypes.func.isRequired,
+  pgmStartDate: PropTypes.object.isRequired,
+  postStartDate: PropTypes.object.isRequired,
+  pgmEndDate: PropTypes.object.isRequired,
+  postEndDate: PropTypes.object.isRequired,
+  setPgmStartDate: PropTypes.func.isRequired,
+  setPostStartDate: PropTypes.func.isRequired,
+  setPgmEndDate: PropTypes.func.isRequired,
+  setPostEndDate: PropTypes.func.isRequired,
+  pgmSearchKeyword: PropTypes.string.isRequired,
+  postSearchKeyword: PropTypes.string.isRequired,
+  pgmSort: PropTypes.string.isRequired,
+  postSort: PropTypes.string.isRequired,
+  onChangePgmSearchKeyword: PropTypes.func.isRequired,
+  onChangePostSearchKeyword: PropTypes.func.isRequired,
+  onChangePgmSort: PropTypes.func.isRequired,
+  onChangePostSort: PropTypes.func.isRequired,
   onClickSubMenuItem: PropTypes.func.isRequired,
   onClickAddPostBtn: PropTypes.func.isRequired,
   onClickAddProgramBtn: PropTypes.func.isRequired

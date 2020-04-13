@@ -56,6 +56,7 @@ const CreatePostModalPresentaion = ({
             onChange={onChangeThumbnail}
             ref={thumbnailEl}
             hidden
+            accept="image/jpg, image/jpeg, image/png"
           />
         </Form.Group>
         <Form.Group>

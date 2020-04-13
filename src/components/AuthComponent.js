@@ -5,23 +5,20 @@ import SignUpContainer from "./SignUpContainer";
 import DashboardContainer from "./DashboardContainer";
 import LoadingComponent from "./LoadingComponent";
 import { LOAD_USER_REQUEST } from "../reducers/user";
-import { showToast } from "../module/toast";
 
 const AuthComponent = () => {
   const dispatch = useDispatch();
   const { is_show_login_ui, is_show_signup_ui } = useSelector(
-    state => state.common
+    (state) => state.common
   );
-  const { userInfo } = useSelector(state => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   useEffect(() => {
     setTimeout(() => {
+      // 로그인한 사용자의 세션 정보를 가져옴.
       dispatch({
-        type: LOAD_USER_REQUEST,
-        payload: {
-          toast: ({ type, message }) => showToast({ type, message })
-        }
+        type: LOAD_USER_REQUEST
       });
-    }, 2000);
+    }, 1000);
   }, [dispatch]);
   return is_show_login_ui ? (
     <LoginContainer />

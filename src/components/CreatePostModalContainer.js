@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import CreatePostModalPresentaion from "./CreatePostModalPresentation";
 import { HIDE_ADDPOSTMODAL_REQUEST } from "../reducers/common";
 import { ADD_POSTITEM_REQUEST } from "../reducers/post";
-import { showToast } from "../module/toast";
 
 const CreatePostModalContainer = () => {
   const dispatch = useDispatch();
@@ -25,11 +24,11 @@ const CreatePostModalContainer = () => {
     });
   }, [dispatch]);
 
-  const onChangeTitle = useCallback(e => {
+  const onChangeTitle = useCallback((e) => {
     setTitle(e.target.value);
   }, []);
 
-  const onChangeDescription = useCallback(e => {
+  const onChangeDescription = useCallback((e) => {
     setDescription(e.target.value);
   }, []);
 
@@ -37,7 +36,7 @@ const CreatePostModalContainer = () => {
     thumbnailEl.current.click();
   }, []);
 
-  const onChangeThumbnail = useCallback(e => {
+  const onChangeThumbnail = useCallback((e) => {
     // 파일 선택창에서 취소 버튼을 누른 경우
     if (!e.target.value) return;
     const reader = new FileReader();
@@ -73,8 +72,7 @@ const CreatePostModalContainer = () => {
         title,
         description,
         tags,
-        selectedFile,
-        toast: ({ type, message }) => showToast({ type, message })
+        selectedFile
       }
     });
   }, [title, description, tags, selectedFile, dispatch]);

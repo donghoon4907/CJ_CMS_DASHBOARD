@@ -66,6 +66,7 @@ const SignUpPresentation = ({
           onChange={onChangeThumbnail}
           ref={thumbnailEl}
           hidden
+          accept="image/jpg, image/jpeg, image/png"
         />
       </ThumbnailWrap>
       <div className="input-group mb-3">

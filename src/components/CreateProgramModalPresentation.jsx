@@ -20,9 +20,12 @@ const CreateProgramModalPresentaion = ({
   detailGenreEl,
   ageGrade,
   ageGradeEl,
+  channel,
+  channelEl,
   loadedGenre,
   loadedDetailGenre,
   loadedAgeGrade,
+  loadedChannel,
   onHide,
   onClickThumbnail,
   onChangeTitle,
@@ -32,6 +35,7 @@ const CreateProgramModalPresentaion = ({
   onChangeGenre,
   onChangeDetailGenre,
   onChangeAgeGrade,
+  onChangeChannel,
   onSubmit,
   isGetDetailGernreListLoading
 }) => (
@@ -70,7 +74,26 @@ const CreateProgramModalPresentaion = ({
             onChange={onChangeThumbnail}
             ref={thumbnailEl}
             hidden
+            accept="image/jpg, image/jpeg, image/png"
           />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>채널</Form.Label>
+          <Form.Control
+            as="select"
+            value={channel}
+            onChange={onChangeGenre}
+            ref={channelEl}
+          >
+            {loadedChannel &&
+              loadedChannel.map(({ id, name }, idx) => {
+                return (
+                  <option value={id} key={idx}>
+                    {name}
+                  </option>
+                );
+              })}
+          </Form.Control>
         </Form.Group>
         <Form.Group>
           <Form.Label>프로그램명</Form.Label>
@@ -223,6 +246,11 @@ CreateProgramModalPresentaion.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object })
   ]),
+  channel: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  channelEl: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.object })
+  ]),
   loadedGenre: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -238,6 +266,12 @@ CreateProgramModalPresentaion.propTypes = {
     )
   }),
   loadedAgeGrade: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    })
+  ),
+  loadedChannel: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired

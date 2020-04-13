@@ -37,14 +37,14 @@ import { showToast } from "../module/toast";
 function dbcheckAPI(payload) {
   return axios
     .post("/user/check", payload)
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function checkEmailAPI(payload) {
   return axios
     .post("/user/email", payload)
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function signUpAPI(payload) {
   const { id, pwd, name, email, selectedFile } = payload;
@@ -60,16 +60,16 @@ function signUpAPI(payload) {
 
   return axios
     .post("/user/add", formData)
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function logInAPI(payload) {
   return axios
     .post("/user/login", payload, {
       withCredentials: true
     })
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function logOutAPI() {
   return axios
@@ -80,8 +80,8 @@ function logOutAPI() {
         withCredentials: true
       }
     )
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function loadUserAPI() {
   return axios
@@ -92,8 +92,8 @@ function loadUserAPI() {
         withCredentials: true
       }
     )
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function* dbcheck(action) {
   const { response, error } = yield call(dbcheckAPI, action.payload);
@@ -199,6 +199,9 @@ function* logOut(action) {
       type: LOG_OUT_FAILURE,
       payload: message
     });
+    yield put({
+      type: SHOW_LOGINLAYER_REQUEST
+    });
     showToast({
       type,
       message
@@ -258,7 +261,7 @@ function* watchLogOut() {
 function* watchLoadUser() {
   yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
-export default function*() {
+export default function* () {
   yield all([
     fork(watchDbCheck),
     fork(watchCheckEmail),

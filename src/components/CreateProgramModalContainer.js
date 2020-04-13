@@ -14,8 +14,9 @@ const CreateProgramModalContainer = () => {
     loadedGenre,
     loadedAgeGrade,
     loadedDetailGenre,
+    loadedChannel,
     isGetDetailGernreListLoading
-  } = useSelector(state => state.program);
+  } = useSelector((state) => state.program);
 
   const titleEl = useRef(null);
   const descriptionEl = useRef(null);
@@ -24,6 +25,7 @@ const CreateProgramModalContainer = () => {
   const genreEl = useRef(null);
   const detailGenreEl = useRef(null);
   const ageGradeEl = useRef(null);
+  const channelEl = useRef(null);
 
   const [title, setTitle] = useState(""); // 프로그램명
   const [description, setDescription] = useState(""); // 프로그램 내용
@@ -35,6 +37,7 @@ const CreateProgramModalContainer = () => {
   const [ageGrade, setAgeGrade] = useState(
     loadedAgeGrade && loadedAgeGrade[0].id
   ); // 연령 등급
+  const [channel, setChannel] = useState(loadedChannel && loadedChannel[0].id); //채널
 
   // 모달 끄기
   const onHide = useCallback(() => {
@@ -43,19 +46,23 @@ const CreateProgramModalContainer = () => {
     });
   }, [dispatch]);
 
-  const onChangeTitle = useCallback(e => {
+  const onChangeTitle = useCallback((e) => {
     setTitle(e.target.value);
   }, []);
 
-  const onChangeDescription = useCallback(e => {
+  const onChangeDescription = useCallback((e) => {
     setDescription(e.target.value);
+  }, []);
+
+  const onChangeChannel = useCallback((e) => {
+    setChannel(e.target.value);
   }, []);
 
   const onClickThumbnail = useCallback(() => {
     thumbnailEl.current.click();
   }, []);
 
-  const onChangeThumbnail = useCallback(e => {
+  const onChangeThumbnail = useCallback((e) => {
     // 파일 선택창에서 취소 버튼을 누른 경우
     if (!e.target.value) return;
     const reader = new FileReader();
@@ -69,12 +76,12 @@ const CreateProgramModalContainer = () => {
     reader.readAsDataURL(file);
   }, []);
 
-  const onChangePrdtYear = useCallback(e => {
+  const onChangePrdtYear = useCallback((e) => {
     setPrdtYear(e.target.value);
   }, []);
 
   const onChangeGenre = useCallback(
-    e => {
+    (e) => {
       setGenre(e.target.value);
       dispatch({
         type: GET_DETAILGENRELIST_REQUEST,
@@ -86,11 +93,11 @@ const CreateProgramModalContainer = () => {
     [dispatch]
   );
 
-  const onChangeDetailGenre = useCallback(e => {
+  const onChangeDetailGenre = useCallback((e) => {
     setDetailGenre(e.target.value);
   }, []);
 
-  const onChangeAgeGrade = useCallback(e => {
+  const onChangeAgeGrade = useCallback((e) => {
     setAgeGrade(e.target.value);
   }, []);
 
@@ -134,6 +141,11 @@ const CreateProgramModalContainer = () => {
       ageGradeEl.current.focus();
       return;
     }
+    if (!channel) {
+      alert("채널을 선택하세요.");
+      channelEl.current.focus();
+      return;
+    }
 
     dispatch({
       type: ADD_PROGRAMITEM_REQUEST,
@@ -144,7 +156,8 @@ const CreateProgramModalContainer = () => {
         prdtYear,
         genre,
         detailGenre,
-        ageGrade
+        ageGrade,
+        channel
       }
     });
   }, [
@@ -155,6 +168,7 @@ const CreateProgramModalContainer = () => {
     genre,
     detailGenre,
     ageGrade,
+    channel,
     dispatch
   ]);
 
@@ -189,9 +203,12 @@ const CreateProgramModalContainer = () => {
       detailGenreEl={detailGenreEl}
       ageGrade={ageGrade}
       ageGradeEl={ageGradeEl}
+      channel={channel}
+      channelEl={channelEl}
       loadedGenre={loadedGenre}
       loadedDetailGenre={loadedDetailGenre}
       loadedAgeGrade={loadedAgeGrade}
+      loadedChannel={loadedChannel}
       onHide={onHide}
       onClickThumbnail={onClickThumbnail}
       onChangeTitle={onChangeTitle}
@@ -201,6 +218,7 @@ const CreateProgramModalContainer = () => {
       onChangeGenre={onChangeGenre}
       onChangeDetailGenre={onChangeDetailGenre}
       onChangeAgeGrade={onChangeAgeGrade}
+      onChangeChannel={onChangeChannel}
       onSubmit={onSubmit}
       isGetDetailGernreListLoading={isGetDetailGernreListLoading}
     />
