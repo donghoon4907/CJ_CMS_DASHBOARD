@@ -9,6 +9,7 @@ import {
   GET_AGEGRADELIST_REQUEST,
   GET_CHANNELLIST_REQUEST
 } from "../reducers/program";
+import moment from "moment";
 
 const DashboardContainer = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,9 @@ const DashboardContainer = () => {
       type: GET_PROGRAMLIST_REQUEST,
       payload: {
         lastId: 0,
-        limit: 20
+        limit: 20,
+        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        endDate: moment().format("YYYY-MM-DD")
       }
     });
     // 포스트 목록을 가져옵니다.
@@ -46,7 +49,9 @@ const DashboardContainer = () => {
       type: GET_POSTLIST_REQUEST,
       payload: {
         lastId: 0,
-        limit: 20
+        limit: 20,
+        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        endDate: moment().format("YYYY-MM-DD")
       }
     });
     // 장르 목록을 가져옵니다.

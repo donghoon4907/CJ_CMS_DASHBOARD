@@ -6,11 +6,20 @@ import {
   SHOW_ADDPOSTMODAL_REQUEST,
   SHOW_ADDPROGRAMMODAL_REQUEST
 } from "../reducers/common";
+import {
+  GET_PROGRAMLIST_REQUEST,
+  INIT_PROGRAMLIST_REQUEST
+} from "../reducers/program";
 
 const PublishContainer = () => {
   const dispatch = useDispatch();
-  const { loadedPost } = useSelector((state) => state.post);
-  const { loadedProgram } = useSelector((state) => state.program);
+
+  const { loadedPost, isGetListLoading: isLoadingPost } = useSelector(
+    (state) => state.post
+  );
+  const { loadedProgram, isGetListLoading: isLoadingPgm } = useSelector(
+    (state) => state.program
+  );
 
   const [activeMenu, setActiveMenu] = useState(1); // 현재 선택된 메뉴
   const [pgmStartDate, setPgmStartDate] = useState(
@@ -34,9 +43,26 @@ const PublishContainer = () => {
     setPostSearchKeyword(e.target.value);
   }, []);
 
-  const onChangePgmSort = useCallback((e) => {
-    setPgmSort(e.target.value);
-  }, []);
+  const onChangePgmSort = useCallback(
+    (e) => {
+      setPgmSort(e.target.value);
+      dispatch({
+        type: INIT_PROGRAMLIST_REQUEST
+      });
+      dispatch({
+        type: GET_PROGRAMLIST_REQUEST,
+        payload: {
+          lastId: 0,
+          limit: 20,
+          searchKeyword: pgmSearchKeyword,
+          startDate: moment(pgmStartDate).format("YYYY-MM-DD"),
+          endDate: moment(pgmEndDate).format("YYYY-MM-DD"),
+          sort: e.target.value
+        }
+      });
+    },
+    [pgmSearchKeyword, pgmStartDate, pgmEndDate, dispatch]
+  );
 
   const onChangePostSort = useCallback((e) => {
     setPostSort(e.target.value);
@@ -58,9 +84,83 @@ const PublishContainer = () => {
       type: SHOW_ADDPROGRAMMODAL_REQUEST
     });
   }, [dispatch]);
+  // 엔터 검색
+  const onKeyDownPgmSearchKeyword = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        dispatch({
+          type: INIT_PROGRAMLIST_REQUEST
+        });
+        dispatch({
+          type: GET_PROGRAMLIST_REQUEST,
+          payload: {
+            lastId: 0,
+            limit: 20,
+            searchKeyword: e.target.value,
+            startDate: moment(pgmStartDate).format("YYYY-MM-DD"),
+            endDate: moment(pgmEndDate).format("YYYY-MM-DD")
+          }
+        });
+        setPgmSort("createdAt,DESC");
+      }
+    },
+    [pgmStartDate, pgmEndDate, dispatch]
+  );
+  // 클릭 검색
+  const onClickPgmSearchBtn = useCallback(() => {
+    if (isLoadingPgm) return;
+    dispatch({
+      type: INIT_PROGRAMLIST_REQUEST
+    });
+    dispatch({
+      type: GET_PROGRAMLIST_REQUEST,
+      payload: {
+        lastId: 0,
+        limit: 20,
+        searchKeyword: pgmSearchKeyword,
+        startDate: moment(pgmStartDate).format("YYYY-MM-DD"),
+        endDate: moment(pgmEndDate).format("YYYY-MM-DD")
+      }
+    });
+    setPgmSort("createdAt,DESC");
+  }, [isLoadingPgm, pgmSearchKeyword, pgmStartDate, pgmEndDate, dispatch]);
+  // 스크롤 더보기
+  const onScrollInPgmList = useCallback(
+    (e) => {
+      if (loadedProgram) {
+        const { id: lastId } = loadedProgram[loadedProgram.length - 1];
+        const { scrollHeight, clientHeight, scrollTop } = e.target;
+        if (scrollHeight - scrollTop === clientHeight) {
+          if (loadedProgram.length % 20 === 0) {
+            dispatch({
+              type: GET_PROGRAMLIST_REQUEST,
+              payload: {
+                lastId: lastId,
+                limit: 20,
+                searchKeyword: pgmSearchKeyword,
+                startDate: moment(pgmStartDate).format("YYYY-MM-DD"),
+                endDate: moment(pgmEndDate).format("YYYY-MM-DD"),
+                sort: pgmSort
+              }
+            });
+          }
+        }
+      }
+    },
+    [
+      loadedProgram,
+      pgmSearchKeyword,
+      pgmStartDate,
+      pgmEndDate,
+      pgmSort,
+      dispatch
+    ]
+  );
 
   return (
     <PublishPresentaion
+      isLoadingPost={isLoadingPost}
+      isLoadingPgm={isLoadingPgm}
       loadedPost={loadedPost}
       loadedProgram={loadedProgram}
       activeMenu={activeMenu}
@@ -83,6 +183,9 @@ const PublishContainer = () => {
       onClickSubMenuItem={onClickSubMenuItem}
       onClickAddPostBtn={onClickAddPostBtn}
       onClickAddProgramBtn={onClickAddProgramBtn}
+      onKeyDownPgmSearchKeyword={onKeyDownPgmSearchKeyword}
+      onClickPgmSearchBtn={onClickPgmSearchBtn}
+      onScrollInPgmList={onScrollInPgmList}
     />
   );
 };

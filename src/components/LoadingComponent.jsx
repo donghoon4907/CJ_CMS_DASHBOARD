@@ -5,18 +5,18 @@ import { rotate } from "../theme/animation";
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: ${(props) => props.height};
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${props => props.theme.menuBgColor};
+  background: ${(props) => props.theme.menuBgColor};
 `;
 const LoadingWrap = styled.div`
   animation: ${rotate({ from: 0, to: 360 })} 3s linear infinite;
 `;
 
-const LoadingComponent = () => (
-  <Container>
+const LoadingComponent = ({ height = "100vh" }) => (
+  <Container height={height}>
     <LoadingWrap>
       <Loading
         style={{

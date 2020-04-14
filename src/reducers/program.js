@@ -55,7 +55,11 @@ export default (state = initialState, action) =>
       }
       case GET_PROGRAMLIST_SUCCESS: {
         draft.isGetListLoading = false;
-        draft.loadedProgram = action.payload;
+        if (draft.loadedProgram) {
+          draft.loadedProgram = draft.loadedProgram.concat(action.payload);
+        } else {
+          draft.loadedProgram = action.payload;
+        }
         break;
       }
       case GET_PROGRAMLIST_FAILURE: {

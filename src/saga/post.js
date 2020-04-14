@@ -15,12 +15,13 @@ import {
 import { LOG_OUT_SUCCESS } from "../reducers/user";
 import { axiosErrorHandle } from "../module/error";
 import { showToast } from "../module/toast";
+import { makeListQuery } from "../module/query";
 
-function getListAPI({ lastId = 0, limit = 20 }) {
+function getListAPI(payload) {
   return axios
-    .get(`/post/list?lastId=${lastId}&limit=${limit}`)
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .get(makeListQuery({ type: "post", ...payload }))
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function addItemAPI(payload) {
   const { title, description, tags, selectedFile } = payload;
@@ -41,8 +42,8 @@ function addItemAPI(payload) {
     .post("/post/add", formData, {
       withCredentials: true
     })
-    .then(response => ({ response }))
-    .catch(error => ({ error }));
+    .then((response) => ({ response }))
+    .catch((error) => ({ error }));
 }
 function* getList(action) {
   const { response, error } = yield call(getListAPI, action.payload);
@@ -117,6 +118,6 @@ function* watchGetList() {
 function* watchAddItem() {
   yield takeEvery(ADD_POSTITEM_REQUEST, addItem);
 }
-export default function*() {
+export default function* () {
   yield all([fork(watchGetList), fork(watchAddItem)]);
 }

@@ -27,10 +27,11 @@ import {
 import { LOG_OUT_SUCCESS } from "../reducers/user";
 import { axiosErrorHandle } from "../module/error";
 import { showToast } from "../module/toast";
+import { makeListQuery } from "../module/query";
 
-function getListAPI({ lastId = 0, limit = 20 }) {
+function getListAPI(payload) {
   return axios
-    .get(`/program/list?lastId=${lastId}&limit=${limit}`)
+    .get(makeListQuery({ type: "program", ...payload }))
     .then((response) => ({ response }))
     .catch((error) => ({ error }));
 }

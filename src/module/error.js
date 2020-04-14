@@ -1,4 +1,5 @@
-export const axiosErrorHandle = error => {
+// api 에러 처리
+export const axiosErrorHandle = (error) => {
   let message,
     type,
     isExpired = false;

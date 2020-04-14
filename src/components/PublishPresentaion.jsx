@@ -18,8 +18,11 @@ import {
   CardFooter,
   EllipsisText
 } from "./PublishStyledComponent";
+import EmptyComponent from "./EmptyComponent";
 
 const PublishPresentaion = ({
+  isLoadingPost,
+  isLoadingPgm,
   loadedPost,
   loadedProgram,
   activeMenu,
@@ -41,7 +44,10 @@ const PublishPresentaion = ({
   onChangePostSort,
   onClickSubMenuItem,
   onClickAddPostBtn,
-  onClickAddProgramBtn
+  onClickAddProgramBtn,
+  onKeyDownPgmSearchKeyword,
+  onClickPgmSearchBtn,
+  onScrollInPgmList
 }) => (
   <>
     <SubMenu>
@@ -97,6 +103,8 @@ const PublishPresentaion = ({
                 placeholder="검색어를 입력하세요."
                 value={pgmSearchKeyword}
                 onChange={onChangePgmSearchKeyword}
+                onKeyDown={onKeyDownPgmSearchKeyword}
+                disabled={isLoadingPgm}
               />
               <InputGroup.Prepend>
                 <InputGroup.Text
@@ -105,7 +113,7 @@ const PublishPresentaion = ({
                     borderBottomRightRadius: 5
                   }}
                 >
-                  검색
+                  <span onClick={onClickPgmSearchBtn}>검색</span>
                 </InputGroup.Text>
               </InputGroup.Prepend>
             </InputGroup>
@@ -130,8 +138,8 @@ const PublishPresentaion = ({
             </Form.Control>
           </Field>
         </SearchBar>
-        <ListWrap className="p-3">
-          {loadedProgram &&
+        <ListWrap className="p-3" onScroll={onScrollInPgmList}>
+          {loadedProgram && loadedProgram.length > 0 ? (
             loadedProgram.map(
               ({
                 id,
@@ -140,13 +148,15 @@ const PublishPresentaion = ({
                 createdAt,
                 Images,
                 Channel,
-                Contents
+                Contents,
+                Genre,
+                DetailGenre
               }) => (
                 <CardWrap key={id}>
                   <CardHeader>
                     <div>
                       <img
-                        width={40}
+                        width={50}
                         height={20}
                         src={`${process.env.REACT_APP_BACKEND_HOST}/images/${Channel.Images[0].src}`}
                         alt={"logo"}
@@ -167,11 +177,17 @@ const PublishPresentaion = ({
                     <EllipsisText>{description}</EllipsisText>
                   </CardBody>
                   <CardFooter>
+                    <div>
+                      {Genre.name}, {DetailGenre.name}
+                    </div>
                     <div>총 화수 : {Contents.length}</div>
                   </CardFooter>
                 </CardWrap>
               )
-            )}
+            )
+          ) : (
+            <EmptyComponent comment={"검색 결과가 없습니다."} />
+          )}
         </ListWrap>
       </WorkWrap>
       <WorkWrap active={activeMenu === 2 && 1}>
@@ -251,7 +267,9 @@ const PublishPresentaion = ({
 export default PublishPresentaion;
 
 PublishPresentaion.propTypes = {
-  loadedPost: PropTypes.arrayOf(PropTypes.shape({})),
+  isLoadingPost: PropTypes.bool.isRequired,
+  isLoadingPgm: PropTypes.bool.isRequired,
+  // loadedPost: PropTypes.arrayOf(PropTypes.shape({})),
   // loadedProgram,
   activeMenu: PropTypes.number.isRequired,
   pgmStartDate: PropTypes.object.isRequired,
@@ -272,5 +290,7 @@ PublishPresentaion.propTypes = {
   onChangePostSort: PropTypes.func.isRequired,
   onClickSubMenuItem: PropTypes.func.isRequired,
   onClickAddPostBtn: PropTypes.func.isRequired,
-  onClickAddProgramBtn: PropTypes.func.isRequired
+  onClickAddProgramBtn: PropTypes.func.isRequired,
+  onKeyDownPgmSearchKeyword: PropTypes.func.isRequired,
+  onClickPgmSearchBtn: PropTypes.func.isRequired
 };

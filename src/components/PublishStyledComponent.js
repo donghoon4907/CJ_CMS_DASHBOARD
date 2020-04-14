@@ -74,19 +74,21 @@ export const ListWrap = styled.div`
 
 export const CardWrap = styled.div`
   width: ${(props) =>
-    (window.screen.width - props.theme.asideMenuWidth - 400) / 5}px;
+    (window.screen.width - props.theme.asideMenuWidth) / 5 -
+    props.theme.betweenCardMargin -
+    10}px;
   height: 240px;
   overflow: hidden;
   position: relative;
   border: 1px solid ${(props) => props.theme.cardBorderColor};
-  margin-right: 30px;
-  margin-bottom: 30px;
+  margin-right: ${(props) => props.theme.betweenCardMargin}px;
+  margin-bottom: ${(props) => props.theme.betweenCardMargin}px;
   font-size: 12px;
   background: #2a3241;
 
   & ~ & {
-    margin-right: 30px;
-    margin-bottom: 30px;
+    margin-right: ${(props) => props.theme.betweenCardMargin}px;
+    margin-bottom: ${(props) => props.theme.betweenCardMargin}px;
   }
 
   &:nth-child(5n) {
@@ -127,6 +129,9 @@ export const CardFooter = styled(CardItem)`
   height: 30px;
   padding-right: 5px;
   padding-left: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 export const EllipsisText = styled.div`
   width: 100%;

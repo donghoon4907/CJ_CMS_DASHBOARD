@@ -82,7 +82,7 @@ const CreateProgramModalPresentaion = ({
           <Form.Control
             as="select"
             value={channel}
-            onChange={onChangeGenre}
+            onChange={onChangeChannel}
             ref={channelEl}
           >
             {loadedChannel &&
