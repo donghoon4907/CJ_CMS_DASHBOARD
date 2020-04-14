@@ -17,9 +17,11 @@ const PublishContainer = () => {
   const { loadedPost, isGetListLoading: isLoadingPost } = useSelector(
     (state) => state.post
   );
-  const { loadedProgram, isGetListLoading: isLoadingPgm } = useSelector(
-    (state) => state.program
-  );
+  const {
+    loadedProgram,
+    loadedChannel,
+    isGetListLoading: isLoadingPgm
+  } = useSelector((state) => state.program);
 
   const [activeMenu, setActiveMenu] = useState(1); // 현재 선택된 메뉴
   const [pgmStartDate, setPgmStartDate] = useState(
@@ -34,6 +36,7 @@ const PublishContainer = () => {
   const [postSearchKeyword, setPostSearchKeyword] = useState(""); // 포스트 검색어
   const [pgmSort, setPgmSort] = useState("createdAt,DESC"); // 프로그램 정렬
   const [postSort, setPostSort] = useState("createdAt,DESC"); // 포스트 정렬
+  const [pgmChannel, setPgmChannel] = useState(""); // 프로그램 채널
 
   const onChangePgmSearchKeyword = useCallback((e) => {
     setPgmSearchKeyword(e.target.value);
@@ -66,6 +69,10 @@ const PublishContainer = () => {
 
   const onChangePostSort = useCallback((e) => {
     setPostSort(e.target.value);
+  }, []);
+
+  const onChangePgmChannel = useCallback((e) => {
+    setPgmChannel(e.target.value);
   }, []);
 
   // 부메뉴 클릭 (현재: 프로그램, 포스트)
@@ -163,6 +170,7 @@ const PublishContainer = () => {
       isLoadingPgm={isLoadingPgm}
       loadedPost={loadedPost}
       loadedProgram={loadedProgram}
+      loadedChannel={loadedChannel}
       activeMenu={activeMenu}
       pgmStartDate={pgmStartDate}
       postStartDate={postStartDate}
@@ -176,10 +184,12 @@ const PublishContainer = () => {
       postSearchKeyword={postSearchKeyword}
       pgmSort={pgmSort}
       postSort={postSort}
+      pgmChannel={pgmChannel}
       onChangePgmSearchKeyword={onChangePgmSearchKeyword}
       onChangePostSearchKeyword={onChangePostSearchKeyword}
       onChangePgmSort={onChangePgmSort}
       onChangePostSort={onChangePostSort}
+      onChangePgmChannel={onChangePgmChannel}
       onClickSubMenuItem={onClickSubMenuItem}
       onClickAddPostBtn={onClickAddPostBtn}
       onClickAddProgramBtn={onClickAddProgramBtn}

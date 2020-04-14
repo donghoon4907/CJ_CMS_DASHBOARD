@@ -61,6 +61,10 @@ export const Field = styled.div`
   justify-content: start;
   padding-left: 10px;
   padding-right: 10px;
+
+  & select {
+    margin-left: 10px;
+  }
 `;
 
 export const ListWrap = styled.div`

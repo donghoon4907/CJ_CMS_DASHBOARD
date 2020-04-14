@@ -25,6 +25,7 @@ const PublishPresentaion = ({
   isLoadingPgm,
   loadedPost,
   loadedProgram,
+  loadedChannel,
   activeMenu,
   pgmStartDate,
   postStartDate,
@@ -38,10 +39,12 @@ const PublishPresentaion = ({
   postSearchKeyword,
   pgmSort,
   postSort,
+  pgmChannel,
   onChangePgmSearchKeyword,
   onChangePostSearchKeyword,
   onChangePgmSort,
   onChangePostSort,
+  onChangePgmChannel,
   onClickSubMenuItem,
   onClickAddPostBtn,
   onClickAddProgramBtn,
@@ -120,12 +123,38 @@ const PublishPresentaion = ({
           </Field>
         </SearchBar>
         <SearchBar>
-          <Field flex={8}>
+          <Field flex={3}>
             <StyledButton onClick={onClickAddProgramBtn}>
               프로그램 등록
             </StyledButton>
           </Field>
           <Field flex={1}>
+            <Form.Control
+              as="select"
+              value={pgmSort}
+              onChange={onChangePgmSort}
+            >
+              <option value="createdAt,DESC">등록일 순</option>
+              <option value="createdAt,ASC">등록일 역순</option>
+              <option value="updatedAt,DESC">수정일 순</option>
+              <option value="updatedAt,ASC">수정일 역순</option>
+            </Form.Control>
+            <Form.Control
+              as="select"
+              value={pgmChannel}
+              onChange={onChangePgmChannel}
+              placeholder={"채널을 선택하세요."}
+            >
+              <option value="">채널 선택</option>
+              {loadedChannel &&
+                loadedChannel.map(({ id, name }, idx) => {
+                  return (
+                    <option value={id} key={idx}>
+                      {name}
+                    </option>
+                  );
+                })}
+            </Form.Control>
             <Form.Control
               as="select"
               value={pgmSort}
