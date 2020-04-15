@@ -1,22 +1,28 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CreateProgramModalPresentaion from "./CreateProgramModalPresentation";
-import { HIDE_ADDPROGRAMMODAL_REQUEST } from "../reducers/common";
+import SetProgramModalPresentaion from "./SetProgramModalPresentation";
+import {
+  HIDE_ADDPROGRAMMODAL,
+  HIDE_UPDATEPROGRAMMODAL
+} from "../reducers/common";
 import {
   ADD_PROGRAMITEM_REQUEST,
-  GET_DETAILGENRELIST_REQUEST
+  GET_DETAILGENRELIST_REQUEST,
+  UPDATE_PROGRAMITEM_REQUEST,
+  INACTIVE_PROGRAMITEM
 } from "../reducers/program";
 import moment from "moment";
 
-const CreateProgramModalContainer = () => {
+const SetProgramModalContainer = () => {
   const dispatch = useDispatch();
   const {
-    loadedGenre,
-    loadedAgeGrade,
-    loadedDetailGenre,
-    loadedChannel,
-    isGetDetailGernreListLoading
-  } = useSelector((state) => state.program);
+    loadedGenre, // 불러온 전체 장르 목록
+    loadedAgeGrade, // 불러온 전체 연령 등급 목록
+    loadedDetailGenre, // 불러온 세부 장르 목록
+    loadedChannel, // 불러온 전체 채널 목록
+    isGetDetailGernreListLoading, // 세부 장르 로드중 여부
+    activeProgram // 선택된 프로그램 ( 수정 여부 판단 )
+  } = useSelector(state => state.program);
 
   const titleEl = useRef(null);
   const descriptionEl = useRef(null);
@@ -27,6 +33,7 @@ const CreateProgramModalContainer = () => {
   const ageGradeEl = useRef(null);
   const channelEl = useRef(null);
 
+  const [type, setType] = useState("등록");
   const [title, setTitle] = useState(""); // 프로그램명
   const [description, setDescription] = useState(""); // 프로그램 내용
   const [thumbnail, setThumbnail] = useState(""); // 썸네일 미리보기
@@ -42,19 +49,25 @@ const CreateProgramModalContainer = () => {
   // 모달 끄기
   const onHide = useCallback(() => {
     dispatch({
-      type: HIDE_ADDPROGRAMMODAL_REQUEST
+      type: HIDE_ADDPROGRAMMODAL
+    });
+    dispatch({
+      type: HIDE_UPDATEPROGRAMMODAL
+    });
+    dispatch({
+      type: INACTIVE_PROGRAMITEM
     });
   }, [dispatch]);
 
-  const onChangeTitle = useCallback((e) => {
+  const onChangeTitle = useCallback(e => {
     setTitle(e.target.value);
   }, []);
 
-  const onChangeDescription = useCallback((e) => {
+  const onChangeDescription = useCallback(e => {
     setDescription(e.target.value);
   }, []);
 
-  const onChangeChannel = useCallback((e) => {
+  const onChangeChannel = useCallback(e => {
     setChannel(e.target.value);
   }, []);
 
@@ -62,7 +75,7 @@ const CreateProgramModalContainer = () => {
     thumbnailEl.current.click();
   }, []);
 
-  const onChangeThumbnail = useCallback((e) => {
+  const onChangeThumbnail = useCallback(e => {
     // 파일 선택창에서 취소 버튼을 누른 경우
     if (!e.target.value) return;
     const reader = new FileReader();
@@ -76,12 +89,12 @@ const CreateProgramModalContainer = () => {
     reader.readAsDataURL(file);
   }, []);
 
-  const onChangePrdtYear = useCallback((e) => {
+  const onChangePrdtYear = useCallback(e => {
     setPrdtYear(e.target.value);
   }, []);
 
   const onChangeGenre = useCallback(
-    (e) => {
+    e => {
       setGenre(e.target.value);
       dispatch({
         type: GET_DETAILGENRELIST_REQUEST,
@@ -93,11 +106,11 @@ const CreateProgramModalContainer = () => {
     [dispatch]
   );
 
-  const onChangeDetailGenre = useCallback((e) => {
+  const onChangeDetailGenre = useCallback(e => {
     setDetailGenre(e.target.value);
   }, []);
 
-  const onChangeAgeGrade = useCallback((e) => {
+  const onChangeAgeGrade = useCallback(e => {
     setAgeGrade(e.target.value);
   }, []);
 
@@ -117,7 +130,7 @@ const CreateProgramModalContainer = () => {
       descriptionEl.current.focus();
       return;
     }
-    if (!selectedFile) {
+    if (!thumbnail) {
       alert("썸네일을 등록해주세요.");
       return;
     }
@@ -148,8 +161,11 @@ const CreateProgramModalContainer = () => {
     }
 
     dispatch({
-      type: ADD_PROGRAMITEM_REQUEST,
+      type: activeProgram
+        ? UPDATE_PROGRAMITEM_REQUEST
+        : ADD_PROGRAMITEM_REQUEST,
       payload: {
+        id: activeProgram ? activeProgram.id : null,
         title,
         description,
         selectedFile,
@@ -163,32 +179,71 @@ const CreateProgramModalContainer = () => {
   }, [
     title,
     description,
+    thumbnail,
     selectedFile,
     prdtYear,
     genre,
     detailGenre,
     ageGrade,
     channel,
+    activeProgram,
     dispatch
   ]);
-
+  // 세부장르 기본값 설정 수정 시에는 비호출
   useEffect(() => {
-    dispatch({
-      type: GET_DETAILGENRELIST_REQUEST,
-      payload: {
-        id: loadedGenre && loadedGenre[0].id
-      }
-    });
-  }, [dispatch, loadedGenre]);
-
+    if (!activeProgram) {
+      dispatch({
+        type: GET_DETAILGENRELIST_REQUEST,
+        payload: {
+          id: loadedGenre && loadedGenre[0].id
+        }
+      });
+    }
+  }, [dispatch, loadedGenre, activeProgram]);
+  // 대표장르에 따른 세부장르 변경 대응
   useEffect(() => {
     if (loadedDetailGenre) {
-      setDetailGenre(loadedDetailGenre.DetailGenres[0].id);
+      // 수정시 다르게 설정
+      if (activeProgram) {
+        setDetailGenre(activeProgram.DetailGenre.id);
+      } else {
+        setDetailGenre(loadedDetailGenre.DetailGenres[0].id);
+      }
     }
-  }, [loadedDetailGenre]);
-
+  }, [loadedDetailGenre, activeProgram]);
+  // 수정 시 기본 값 설정
+  useEffect(() => {
+    if (activeProgram) {
+      const {
+        title,
+        description,
+        Images,
+        product_year,
+        Genre,
+        Agegrade,
+        Channel
+      } = activeProgram;
+      setType("수정");
+      setTitle(title);
+      setDescription(description);
+      setThumbnail(
+        `${process.env.REACT_APP_BACKEND_HOST}/images/${Images[0].src}`
+      );
+      setPrdtYear(product_year);
+      setAgeGrade(Agegrade.id);
+      setChannel(Channel.id);
+      setGenre(Genre.id);
+      dispatch({
+        type: GET_DETAILGENRELIST_REQUEST,
+        payload: {
+          id: Genre.id
+        }
+      });
+    }
+  }, [activeProgram, dispatch]);
   return (
-    <CreateProgramModalPresentaion
+    <SetProgramModalPresentaion
+      type={type}
       title={title}
       titleEl={titleEl}
       description={description}
@@ -224,4 +279,4 @@ const CreateProgramModalContainer = () => {
     />
   );
 };
-export default CreateProgramModalContainer;
+export default SetProgramModalContainer;

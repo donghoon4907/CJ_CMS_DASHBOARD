@@ -13,15 +13,14 @@ import moment from "moment";
 
 const DashboardContainer = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
-  const {
-    is_show_addpost_ui: isShowCreatePostModal,
-    is_show_addprogram_ui: isShowCreateProgramModal
-  } = useSelector((state) => state.common);
+  const { userInfo } = useSelector(state => state.user);
+  const { isShowAddPostUi, isShowAddPgmUi, isShowUpdatePgmUi } = useSelector(
+    state => state.common
+  );
   const [activeMenu, setActiveMenu] = useState(1);
 
   // 메뉴 클릭
-  const onClickMenuIcon = useCallback((menuNum) => {
+  const onClickMenuIcon = useCallback(menuNum => {
     setActiveMenu(menuNum);
   }, []);
   // 로그아웃
@@ -40,7 +39,9 @@ const DashboardContainer = () => {
       payload: {
         lastId: 0,
         limit: 20,
-        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        startDate: moment()
+          .subtract(7, "d")
+          .format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD")
       }
     });
@@ -50,7 +51,9 @@ const DashboardContainer = () => {
       payload: {
         lastId: 0,
         limit: 20,
-        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        startDate: moment()
+          .subtract(7, "d")
+          .format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD")
       }
     });
@@ -71,8 +74,9 @@ const DashboardContainer = () => {
     <DashboardPresention
       userInfo={userInfo}
       activeMenu={activeMenu}
-      isShowCreatePostModal={isShowCreatePostModal}
-      isShowCreateProgramModal={isShowCreateProgramModal}
+      isShowAddPostUi={isShowAddPostUi}
+      isShowAddPgmUi={isShowAddPgmUi}
+      isShowUpdatePgmUi={isShowUpdatePgmUi}
       onClickMenuIcon={onClickMenuIcon}
       onLogout={onLogout}
     />

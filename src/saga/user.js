@@ -27,24 +27,21 @@ import {
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE
 } from "../reducers/user";
-import {
-  SHOW_LOGINLAYER_REQUEST,
-  SHOW_DASHBOARD_REQUEST
-} from "../reducers/common";
+import { SHOW_LOGINLAYER, SHOW_DASHBOARD } from "../reducers/common";
 import { axiosErrorHandle } from "../module/error";
 import { showToast } from "../module/toast";
 
 function dbcheckAPI(payload) {
   return axios
     .post("/user/check", payload)
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function checkEmailAPI(payload) {
   return axios
     .post("/user/email", payload)
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function signUpAPI(payload) {
   const { id, pwd, name, email, selectedFile } = payload;
@@ -60,16 +57,16 @@ function signUpAPI(payload) {
 
   return axios
     .post("/user/add", formData)
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function logInAPI(payload) {
   return axios
     .post("/user/login", payload, {
       withCredentials: true
     })
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function logOutAPI() {
   return axios
@@ -80,8 +77,8 @@ function logOutAPI() {
         withCredentials: true
       }
     )
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function loadUserAPI() {
   return axios
@@ -92,8 +89,8 @@ function loadUserAPI() {
         withCredentials: true
       }
     )
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function* dbcheck(action) {
   const { response, error } = yield call(dbcheckAPI, action.payload);
@@ -144,7 +141,7 @@ function* signUp(action) {
     });
     showToast({ type: "success", message: response.data.message });
     yield put({
-      type: SHOW_LOGINLAYER_REQUEST
+      type: SHOW_LOGINLAYER
     });
   } else if (error) {
     const { message, type } = axiosErrorHandle(error);
@@ -166,7 +163,7 @@ function* logIn(action) {
       payload: response.data
     });
     yield put({
-      type: SHOW_DASHBOARD_REQUEST
+      type: SHOW_DASHBOARD
     });
     showToast({
       type: "success",
@@ -191,7 +188,7 @@ function* logOut(action) {
       type: LOG_OUT_SUCCESS
     });
     yield put({
-      type: SHOW_LOGINLAYER_REQUEST
+      type: SHOW_LOGINLAYER
     });
   } else if (error) {
     const { message, type } = axiosErrorHandle(error);
@@ -200,7 +197,7 @@ function* logOut(action) {
       payload: message
     });
     yield put({
-      type: SHOW_LOGINLAYER_REQUEST
+      type: SHOW_LOGINLAYER
     });
     showToast({
       type,
@@ -216,7 +213,7 @@ function* loadUser(action) {
       payload: response.data
     });
     yield put({
-      type: SHOW_DASHBOARD_REQUEST
+      type: SHOW_DASHBOARD
     });
     showToast({
       type: "success",
@@ -229,7 +226,7 @@ function* loadUser(action) {
       payload: message
     });
     yield put({
-      type: SHOW_LOGINLAYER_REQUEST
+      type: SHOW_LOGINLAYER
     });
     showToast({
       type,
@@ -261,7 +258,7 @@ function* watchLogOut() {
 function* watchLoadUser() {
   yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
-export default function* () {
+export default function*() {
   yield all([
     fork(watchDbCheck),
     fork(watchCheckEmail),

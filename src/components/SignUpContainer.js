@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SignUpPresentation from "./SignUpPresentation";
-import { SHOW_LOGINLAYER_REQUEST } from "../reducers/common";
+import { SHOW_LOGINLAYER } from "../reducers/common";
 import {
   DOUBLE_CHECK_REQUEST,
   CHECK_EMAIL_REQUEST,
@@ -127,7 +127,7 @@ const SignUpContainer = () => {
   const onCancel = useCallback(() => {
     if (window.confirm("로그인 화면으로 돌아가시겠습니까?")) {
       dispatch({
-        type: SHOW_LOGINLAYER_REQUEST
+        type: SHOW_LOGINLAYER
       });
     }
   }, [dispatch]);

@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import CreatePostModalPresentaion from "./CreatePostModalPresentation";
-import { HIDE_ADDPOSTMODAL_REQUEST } from "../reducers/common";
+import SetPostModalPresentaion from "./SetPostModalPresentation";
+import { HIDE_ADDPOSTMODAL } from "../reducers/common";
 import { ADD_POSTITEM_REQUEST } from "../reducers/post";
 
-const CreatePostModalContainer = () => {
+const SetPostModalContainer = () => {
   const dispatch = useDispatch();
 
   const titleEl = useRef(null);
@@ -20,15 +20,15 @@ const CreatePostModalContainer = () => {
   // 모달 끄기
   const onHide = useCallback(() => {
     dispatch({
-      type: HIDE_ADDPOSTMODAL_REQUEST
+      type: HIDE_ADDPOSTMODAL
     });
   }, [dispatch]);
 
-  const onChangeTitle = useCallback((e) => {
+  const onChangeTitle = useCallback(e => {
     setTitle(e.target.value);
   }, []);
 
-  const onChangeDescription = useCallback((e) => {
+  const onChangeDescription = useCallback(e => {
     setDescription(e.target.value);
   }, []);
 
@@ -36,7 +36,7 @@ const CreatePostModalContainer = () => {
     thumbnailEl.current.click();
   }, []);
 
-  const onChangeThumbnail = useCallback((e) => {
+  const onChangeThumbnail = useCallback(e => {
     // 파일 선택창에서 취소 버튼을 누른 경우
     if (!e.target.value) return;
     const reader = new FileReader();
@@ -78,7 +78,7 @@ const CreatePostModalContainer = () => {
   }, [title, description, tags, selectedFile, dispatch]);
 
   return (
-    <CreatePostModalPresentaion
+    <SetPostModalPresentaion
       title={title}
       titleEl={titleEl}
       description={description}
@@ -96,4 +96,4 @@ const CreatePostModalContainer = () => {
     />
   );
 };
-export default CreatePostModalContainer;
+export default SetPostModalContainer;

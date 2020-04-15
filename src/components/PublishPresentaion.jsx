@@ -19,12 +19,13 @@ import {
   EllipsisText
 } from "./PublishStyledComponent";
 import EmptyComponent from "./EmptyComponent";
+import LoadingComponent from "./LoadingComponent";
 
 const PublishPresentaion = ({
-  isLoadingPost,
   isLoadingPgm,
-  loadedPost,
+  isLoadingPost,
   loadedProgram,
+  loadedPost,
   loadedChannel,
   activeMenu,
   pgmStartDate,
@@ -48,6 +49,7 @@ const PublishPresentaion = ({
   onClickSubMenuItem,
   onClickAddPostBtn,
   onClickAddProgramBtn,
+  onClickPgmItem,
   onKeyDownPgmSearchKeyword,
   onClickPgmSearchBtn,
   onScrollInPgmList
@@ -76,7 +78,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={pgmStartDate}
-                onChange={(date) => setPgmStartDate(date)}
+                onChange={date => setPgmStartDate(date)}
                 selectsStart
                 isClearable
                 startDate={pgmStartDate}
@@ -90,7 +92,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={pgmEndDate}
-                onChange={(date) => setPgmEndDate(date)}
+                onChange={date => setPgmEndDate(date)}
                 selectsEnd
                 isClearable
                 startDate={pgmStartDate}
@@ -131,16 +133,6 @@ const PublishPresentaion = ({
           <Field flex={1}>
             <Form.Control
               as="select"
-              value={pgmSort}
-              onChange={onChangePgmSort}
-            >
-              <option value="createdAt,DESC">등록일 순</option>
-              <option value="createdAt,ASC">등록일 역순</option>
-              <option value="updatedAt,DESC">수정일 순</option>
-              <option value="updatedAt,ASC">수정일 역순</option>
-            </Form.Control>
-            <Form.Control
-              as="select"
               value={pgmChannel}
               onChange={onChangePgmChannel}
               placeholder={"채널을 선택하세요."}
@@ -169,8 +161,8 @@ const PublishPresentaion = ({
         </SearchBar>
         <ListWrap className="p-3" onScroll={onScrollInPgmList}>
           {loadedProgram && loadedProgram.length > 0 ? (
-            loadedProgram.map(
-              ({
+            loadedProgram.map(program => {
+              const {
                 id,
                 title,
                 description,
@@ -180,7 +172,8 @@ const PublishPresentaion = ({
                 Contents,
                 Genre,
                 DetailGenre
-              }) => (
+              } = program;
+              return (
                 <CardWrap key={id}>
                   <CardHeader>
                     <div>
@@ -202,18 +195,26 @@ const PublishPresentaion = ({
                     />
                   </CardThumbnail>
                   <CardBody>
-                    <EllipsisText>{title}</EllipsisText>
-                    <EllipsisText>{description}</EllipsisText>
+                    <EllipsisText onClick={() => onClickPgmItem(program)}>
+                      {title}
+                    </EllipsisText>
+                    <EllipsisText onClick={() => onClickPgmItem(program)}>
+                      {description}
+                    </EllipsisText>
                   </CardBody>
                   <CardFooter>
                     <div>
                       {Genre.name}, {DetailGenre.name}
                     </div>
-                    <div>총 화수 : {Contents.length}</div>
+                    <div>
+                      {Contents.length === 0 ? "예정" : `${Contents.length}화`}
+                    </div>
                   </CardFooter>
                 </CardWrap>
-              )
-            )
+              );
+            })
+          ) : isLoadingPgm ? (
+            <LoadingComponent />
           ) : (
             <EmptyComponent comment={"검색 결과가 없습니다."} />
           )}
@@ -227,7 +228,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={postStartDate}
-                onChange={(date) => setPostStartDate(date)}
+                onChange={date => setPostStartDate(date)}
                 selectsStart
                 isClearable
                 startDate={postStartDate}
@@ -241,7 +242,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={postEndDate}
-                onChange={(date) => setPostEndDate(date)}
+                onChange={date => setPostEndDate(date)}
                 selectsEnd
                 isClearable
                 startDate={postStartDate}
@@ -296,10 +297,10 @@ const PublishPresentaion = ({
 export default PublishPresentaion;
 
 PublishPresentaion.propTypes = {
-  isLoadingPost: PropTypes.bool.isRequired,
   isLoadingPgm: PropTypes.bool.isRequired,
-  // loadedPost: PropTypes.arrayOf(PropTypes.shape({})),
+  isLoadingPost: PropTypes.bool.isRequired,
   // loadedProgram,
+  // loadedPost: PropTypes.arrayOf(PropTypes.shape({})),
   activeMenu: PropTypes.number.isRequired,
   pgmStartDate: PropTypes.object.isRequired,
   postStartDate: PropTypes.object.isRequired,
@@ -320,6 +321,7 @@ PublishPresentaion.propTypes = {
   onClickSubMenuItem: PropTypes.func.isRequired,
   onClickAddPostBtn: PropTypes.func.isRequired,
   onClickAddProgramBtn: PropTypes.func.isRequired,
+  onClickPgmItem: PropTypes.func.isRequired,
   onKeyDownPgmSearchKeyword: PropTypes.func.isRequired,
   onClickPgmSearchBtn: PropTypes.func.isRequired
 };

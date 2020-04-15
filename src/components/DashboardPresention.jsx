@@ -9,16 +9,17 @@ import {
   TopMenu
 } from "./DashboardStyledComponent";
 import { Publish, Home, Setting } from "../assets/icons";
-import CreatePostModal from "./CreatePostModalContainer";
-import CreateProgramModal from "./CreateProgramModalContainer";
+import SetPostModal from "./SetPostModalContainer";
+import SetProgramModal from "./SetProgramModalContainer";
 import PublishContainer from "./PublishContainer";
 // import Chart from "./LineChart";
 
 const DashboardPresentation = ({
   userInfo,
   activeMenu,
-  isShowCreatePostModal,
-  isShowCreateProgramModal,
+  isShowAddPostUi,
+  isShowAddPgmUi,
+  isShowUpdatePgmUi,
   onClickMenuIcon,
   onLogout
 }) => (
@@ -83,28 +84,9 @@ const DashboardPresentation = ({
         </div>
       </TopMenu>
       {activeMenu === 2 && <PublishContainer />}
-      {/* {activeMenu === 3 && (
-        <Fragment>
-          <TitleWrap>
-            <div>Setting</div>
-            <div />
-          </TitleWrap>
-          <Article>
-            <SettingRow>
-              <h3 style={{ textAlign: "center" }}>프로그램 관리</h3>
-            </SettingRow>
-            <SettingRow>
-              <h3 style={{ textAlign: "center" }}>컨텐츠 관리</h3>
-            </SettingRow>
-            <SettingRow>
-              <h3 style={{ textAlign: "center" }}>포스트 관리</h3>
-            </SettingRow>
-          </Article>
-        </Fragment>
-      )} */}
     </ContentMenu>
-    {isShowCreatePostModal && <CreatePostModal />}
-    {isShowCreateProgramModal && <CreateProgramModal />}
+    {isShowAddPostUi && <SetPostModal />}
+    {(isShowAddPgmUi || isShowUpdatePgmUi) && <SetProgramModal />}
   </Container>
 );
 
@@ -123,8 +105,9 @@ DashboardPresentation.propTypes = {
     )
   }),
   activeMenu: PropTypes.number.isRequired,
-  isShowCreatePostModal: PropTypes.bool.isRequired,
-  isShowCreateProgramModal: PropTypes.bool.isRequired,
+  isShowAddPostUi: PropTypes.bool.isRequired,
+  isShowAddPgmUi: PropTypes.bool.isRequired,
+  isShowUpdatePgmUi: PropTypes.bool.isRequired,
   onClickMenuIcon: PropTypes.func.isRequired,
   onLogout: PropTypes.func.isRequired
 };

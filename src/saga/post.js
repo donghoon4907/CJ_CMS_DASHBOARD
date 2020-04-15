@@ -8,10 +8,7 @@ import {
   ADD_POSTITEM_SUCCESS,
   ADD_POSTITEM_FAILURE
 } from "../reducers/post";
-import {
-  SHOW_LOGINLAYER_REQUEST,
-  HIDE_ADDPOSTMODAL_REQUEST
-} from "../reducers/common";
+import { SHOW_LOGINLAYER, HIDE_ADDPOSTMODAL } from "../reducers/common";
 import { LOG_OUT_SUCCESS } from "../reducers/user";
 import { axiosErrorHandle } from "../module/error";
 import { showToast } from "../module/toast";
@@ -20,8 +17,8 @@ import { makeListQuery } from "../module/query";
 function getListAPI(payload) {
   return axios
     .get(makeListQuery({ type: "post", ...payload }))
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function addItemAPI(payload) {
   const { title, description, tags, selectedFile } = payload;
@@ -42,8 +39,8 @@ function addItemAPI(payload) {
     .post("/post/add", formData, {
       withCredentials: true
     })
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function* getList(action) {
   const { response, error } = yield call(getListAPI, action.payload);
@@ -83,7 +80,7 @@ function* addItem(action) {
       }
     });
     yield put({
-      type: HIDE_ADDPOSTMODAL_REQUEST
+      type: HIDE_ADDPOSTMODAL
     });
   } else if (error) {
     const { message, type, isExpired } = axiosErrorHandle(error);
@@ -92,10 +89,10 @@ function* addItem(action) {
         type: LOG_OUT_SUCCESS
       });
       yield put({
-        type: HIDE_ADDPOSTMODAL_REQUEST
+        type: HIDE_ADDPOSTMODAL
       });
       yield put({
-        type: SHOW_LOGINLAYER_REQUEST
+        type: SHOW_LOGINLAYER
       });
     } else {
       yield put({
@@ -118,6 +115,6 @@ function* watchGetList() {
 function* watchAddItem() {
   yield takeEvery(ADD_POSTITEM_REQUEST, addItem);
 }
-export default function* () {
+export default function*() {
   yield all([fork(watchGetList), fork(watchAddItem)]);
 }

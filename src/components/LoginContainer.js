@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LoginPresentation from "./LoginPresentation";
-import { SHOW_SIGNUPLAYER_REQUEST } from "../reducers/common";
+import { SHOW_SIGNUPLAYER } from "../reducers/common";
 import { LOG_IN_REQUEST } from "../reducers/user";
 
 const LoginContainer = () => {
@@ -19,7 +19,7 @@ const LoginContainer = () => {
   const onClickSignUpBtn = useCallback(
     () =>
       dispatch({
-        type: SHOW_SIGNUPLAYER_REQUEST
+        type: SHOW_SIGNUPLAYER
       }),
     [dispatch]
   );

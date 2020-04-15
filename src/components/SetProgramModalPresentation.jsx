@@ -5,7 +5,8 @@ import { Image } from "../assets/icons";
 import { Thumbnail } from "./LoginStyledComponent";
 import moment from "moment";
 
-const CreateProgramModalPresentaion = ({
+const SetProgramModalPresentaion = ({
+  type,
   title,
   titleEl,
   description,
@@ -41,7 +42,7 @@ const CreateProgramModalPresentaion = ({
 }) => (
   <Modal show={true} onHide={onHide} animation={true} size="lg">
     <Modal.Header closeButton>
-      <Modal.Title>프로그램 등록</Modal.Title>
+      <Modal.Title>프로그램 {type}</Modal.Title>
     </Modal.Header>
     <Modal.Body
       style={{ maxHeight: window.innerHeight - 200, overflowY: "auto" }}
@@ -135,7 +136,7 @@ const CreateProgramModalPresentaion = ({
             onChange={onChangePrdtYear}
             ref={prdtYearEl}
           >
-            {Array.from({ length: 5 }).map((v, idx) => {
+            {Array.from({ length: 10 }).map((v, idx) => {
               const year = moment().format("YYYY") - idx;
               return (
                 <option value={year} key={idx}>
@@ -203,14 +204,15 @@ const CreateProgramModalPresentaion = ({
         취소
       </Button>
       <Button variant="outline-primary" onClick={onSubmit}>
-        등록
+        {type}
       </Button>
     </Modal.Footer>
   </Modal>
 );
-export default CreateProgramModalPresentaion;
+export default SetProgramModalPresentaion;
 
-CreateProgramModalPresentaion.propTypes = {
+SetProgramModalPresentaion.propTypes = {
+  type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   titleEl: PropTypes.oneOfType([
     PropTypes.func,

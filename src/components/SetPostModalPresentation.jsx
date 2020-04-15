@@ -5,7 +5,7 @@ import HashTagComponent from "./HashTagComponent";
 import { Image } from "../assets/icons";
 import { Thumbnail } from "./LoginStyledComponent";
 
-const CreatePostModalPresentaion = ({
+const SetPostModalPresentaion = ({
   title,
   titleEl,
   description,
@@ -107,9 +107,9 @@ const CreatePostModalPresentaion = ({
     </Modal.Footer>
   </Modal>
 );
-export default CreatePostModalPresentaion;
+export default SetPostModalPresentaion;
 
-CreatePostModalPresentaion.propTypes = {
+SetPostModalPresentaion.propTypes = {
   title: PropTypes.string.isRequired,
   titleEl: PropTypes.oneOfType([
     PropTypes.func,
