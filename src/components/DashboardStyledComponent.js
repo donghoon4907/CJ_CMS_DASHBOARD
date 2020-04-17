@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import logo from "../assets/img/logo.png";
+// import logo from "../assets/img/logo.png";
 
 export const Container = styled.div`
   width: 100vw;
@@ -18,13 +18,13 @@ export const AsideMenu = styled.div`
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   z-index: 1;
 `;
-export const Logo = styled.div`
-  width: 130px;
-  height: 90px;
-  background: url(${logo}) center center no-repeat;
-  background-size: cover;
-  cursor: pointer;
-`;
+// export const Logo = styled.div`
+//   width: 130px;
+//   height: 90px;
+//   background: url(${logo}) center center no-repeat;
+//   background-size: cover;
+//   cursor: pointer;
+// `;
 export const ContentMenu = styled.div`
   position: absolute;
   top: 0;

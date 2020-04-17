@@ -20,39 +20,59 @@ import {
 } from "./PublishStyledComponent";
 import EmptyComponent from "./EmptyComponent";
 import LoadingComponent from "./LoadingComponent";
+import ArticleComponent from "./ArticleComponent";
 
 const PublishPresentaion = ({
   isLoadingPgm,
+  isLoadingContent,
   isLoadingPost,
   loadedProgram,
+  loadedContent,
   loadedPost,
   loadedChannel,
   activeMenu,
   pgmStartDate,
+  contentStartDate,
   postStartDate,
   pgmEndDate,
+  contentEndDate,
   postEndDate,
   setPgmStartDate,
+  setContentStartDate,
   setPostStartDate,
   setPgmEndDate,
+  setContentEndDate,
   setPostEndDate,
   pgmSearchKeyword,
+  contentSearchKeyword,
   postSearchKeyword,
   pgmSort,
+  contentSort,
   postSort,
   pgmChannel,
   onChangePgmSearchKeyword,
+  onChangeContentSearchKeyword,
   onChangePostSearchKeyword,
   onChangePgmSort,
+  onChangeContentSort,
   onChangePostSort,
   onChangePgmChannel,
   onClickSubMenuItem,
-  onClickAddPostBtn,
   onClickAddProgramBtn,
+  onClickAddContentBtn,
+  onClickAddPostBtn,
   onClickPgmItem,
+  onClickContentItem,
+  onClickPostItem,
   onKeyDownPgmSearchKeyword,
+  onKeyDownContentSearchKeyword,
+  onKeyDownPostSearchKeyword,
   onClickPgmSearchBtn,
-  onScrollInPgmList
+  onClickContentSearchBtn,
+  onClickPostSearchBtn,
+  onScrollInPgmList,
+  onScrollInContentList,
+  onScrollInPostList
 }) => (
   <>
     <SubMenu>
@@ -66,10 +86,77 @@ const PublishPresentaion = ({
         active={activeMenu === 2 && 1}
         onClick={() => onClickSubMenuItem(2)}
       >
+        <span>컨텐츠</span>
+      </SubMenuItem>
+      <SubMenuItem
+        active={activeMenu === 3 && 1}
+        onClick={() => onClickSubMenuItem(3)}
+      >
         <span>포스트</span>
       </SubMenuItem>
     </SubMenu>
     <Article>
+      <ArticleComponent
+        type={"프로그램"}
+        isActive={activeMenu === 1}
+        isLoadingData={isLoadingPgm}
+        loadedData={loadedProgram}
+        loadedChannel={loadedChannel}
+        startDate={pgmStartDate}
+        endDate={pgmEndDate}
+        setStartDate={setPgmStartDate}
+        setEndDate={setPgmEndDate}
+        searchKeyword={pgmSearchKeyword}
+        sort={pgmSort}
+        channel={pgmChannel}
+        onChangeSearchKeyword={onChangePgmSearchKeyword}
+        onChangeSort={onChangePgmSort}
+        onChangeChannel={onChangePgmChannel}
+        onClickAddBtn={onClickAddProgramBtn}
+        onClickItem={onClickPgmItem}
+        onKeyDownSearchKeyword={onKeyDownPgmSearchKeyword}
+        onClickSearchBtn={onClickPgmSearchBtn}
+        onScrollInList={onScrollInPgmList}
+      />
+      {/* <ArticleComponent
+        type={"콘텐츠"}
+        isActive={activeMenu === 2}
+        isLoadingData={isLoadingContent}
+        loadedData={loadedContent}
+        startDate={contentStartDate}
+        endDate={contentEndDate}
+        setStartDate={setContentStartDate}
+        setEndDate={setContentEndDate}
+        searchKeyword={contentSearchKeyword}
+        sort={contentSort}
+        onChangeSearchKeyword={onChangeContentSearchKeyword}
+        onChangeSort={onChangeContentSort}
+        onClickAddBtn={onClickAddContentBtn}
+        onClickItem={onClickContentItem}
+        onKeyDownSearchKeyword={onKeyDownContentSearchKeyword}
+        onClickSearchBtn={onClickContentSearchBtn}
+        onScrollInList={onScrollInContentList}
+      />
+      <ArticleComponent
+        type={"포스트"}
+        isActive={activeMenu === 3}
+        isLoadingData={isLoadingPost}
+        loadedData={loadedPost}
+        startDate={postStartDate}
+        endDate={postEndDate}
+        setStartDate={setPostStartDate}
+        setEndDate={setPostEndDate}
+        searchKeyword={postSearchKeyword}
+        sort={postSort}
+        onChangeSearchKeyword={onChangePostSearchKeyword}
+        onChangeSort={onChangePostSort}
+        onClickAddBtn={onClickAddPostBtn}
+        onClickItem={onClickPostItem}
+        onKeyDownSearchKeyword={onKeyDownPostSearchKeyword}
+        onClickSearchBtn={onClickPostSearchBtn}
+        onScrollInList={onScrollInPostList}
+      /> */}
+
       <WorkWrap active={activeMenu === 1 && 1}>
         <SearchBar>
           <Field flex={3}>
@@ -78,7 +165,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={pgmStartDate}
-                onChange={date => setPgmStartDate(date)}
+                onChange={(date) => setPgmStartDate(date)}
                 selectsStart
                 isClearable
                 startDate={pgmStartDate}
@@ -92,7 +179,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={pgmEndDate}
-                onChange={date => setPgmEndDate(date)}
+                onChange={(date) => setPgmEndDate(date)}
                 selectsEnd
                 isClearable
                 startDate={pgmStartDate}
@@ -161,7 +248,7 @@ const PublishPresentaion = ({
         </SearchBar>
         <ListWrap className="p-3" onScroll={onScrollInPgmList}>
           {loadedProgram && loadedProgram.length > 0 ? (
-            loadedProgram.map(program => {
+            loadedProgram.map((program) => {
               const {
                 id,
                 title,
@@ -228,7 +315,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={postStartDate}
-                onChange={date => setPostStartDate(date)}
+                onChange={(date) => setPostStartDate(date)}
                 selectsStart
                 isClearable
                 startDate={postStartDate}
@@ -242,7 +329,7 @@ const PublishPresentaion = ({
               <StyledDatePicker
                 className="form-control"
                 selected={postEndDate}
-                onChange={date => setPostEndDate(date)}
+                onChange={(date) => setPostEndDate(date)}
                 selectsEnd
                 isClearable
                 startDate={postStartDate}

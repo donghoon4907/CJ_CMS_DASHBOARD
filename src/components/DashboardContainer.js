@@ -2,25 +2,26 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DashboardPresention from "./DashboardPresention";
 import { LOG_OUT_REQUEST } from "../reducers/user";
-import { GET_POSTLIST_REQUEST } from "../reducers/post";
 import {
   GET_PROGRAMLIST_REQUEST,
   GET_GENRELIST_REQUEST,
   GET_AGEGRADELIST_REQUEST,
   GET_CHANNELLIST_REQUEST
 } from "../reducers/program";
+import { GET_CONTENTLIST_REQUEST } from "../reducers/content";
+import { GET_POSTLIST_REQUEST } from "../reducers/post";
 import moment from "moment";
 
 const DashboardContainer = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector(state => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   const { isShowAddPostUi, isShowAddPgmUi, isShowUpdatePgmUi } = useSelector(
-    state => state.common
+    (state) => state.common
   );
   const [activeMenu, setActiveMenu] = useState(1);
 
   // 메뉴 클릭
-  const onClickMenuIcon = useCallback(menuNum => {
+  const onClickMenuIcon = useCallback((menuNum) => {
     setActiveMenu(menuNum);
   }, []);
   // 로그아웃
@@ -39,9 +40,16 @@ const DashboardContainer = () => {
       payload: {
         lastId: 0,
         limit: 20,
-        startDate: moment()
-          .subtract(7, "d")
-          .format("YYYY-MM-DD"),
+        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        endDate: moment().format("YYYY-MM-DD")
+      }
+    });
+    dispatch({
+      type: GET_CONTENTLIST_REQUEST,
+      payload: {
+        lastId: 0,
+        limit: 20,
+        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD")
       }
     });
@@ -51,9 +59,7 @@ const DashboardContainer = () => {
       payload: {
         lastId: 0,
         limit: 20,
-        startDate: moment()
-          .subtract(7, "d")
-          .format("YYYY-MM-DD"),
+        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD")
       }
     });

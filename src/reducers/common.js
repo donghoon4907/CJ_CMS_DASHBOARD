@@ -5,14 +5,6 @@ export const SHOW_LOGINLAYER = "SHOW_LOGINLAYER";
 export const SHOW_DASHBOARD = "SHOW_DASHBOARD";
 // 회원가입 화면 보이기
 export const SHOW_SIGNUPLAYER = "SHOW_SIGNUPLAYER";
-// 포스트 추가 모달 보이기
-export const SHOW_ADDPOSTMODAL = "SHOW_ADDPOSTMODAL";
-// 포스트 추가 모달 숨기기
-export const HIDE_ADDPOSTMODAL = "HIDE_ADDPOSTMODAL";
-// 포스트 수정 모달 보이기
-export const SHOW_UPDATEPOSTMODAL = "SHOW_UPDATEPOSTMODAL";
-// 포스트 수정 모달 숨기기
-export const HIDE_UPDATEPOSTMODAL = "HIDE_UPDATEPOSTMODAL";
 // 프로그램 추가 모달 보이기
 export const SHOW_ADDPROGRAMMODAL = "SHOW_ADDPROGRAMMODAL";
 // 프로그램 추가 모달 숨기기
@@ -21,6 +13,22 @@ export const HIDE_ADDPROGRAMMODAL = "HIDE_ADDPROGRAMMODAL";
 export const SHOW_UPDATEPROGRAMMODAL = "SHOW_UPDATEPROGRAMMODAL";
 // 프로그램 수정 모달 숨기기
 export const HIDE_UPDATEPROGRAMMODAL = "HIDE_UPDATEPROGRAMMODAL";
+// 콘텐츠 추가 모달 보이기
+export const SHOW_ADDCONTENTMODAL = "SHOW_ADDCONTENTMODAL";
+// 콘텐츠 추가 모달 숨기기
+export const HIDE_ADDCONTENTMODAL = "HIDE_ADDCONTENTMODAL";
+// 콘텐츠 수정 모달 보이기
+export const SHOW_UPDATECONTENTMODAL = "SHOW_UPDATECONTENTMODAL";
+// 콘텐츠 수정 모달 숨기기
+export const HIDE_UPDATECONTENTMODAL = "HIDE_UPDATECONTENTMODAL";
+// 포스트 추가 모달 보이기
+export const SHOW_ADDPOSTMODAL = "SHOW_ADDPOSTMODAL";
+// 포스트 추가 모달 숨기기
+export const HIDE_ADDPOSTMODAL = "HIDE_ADDPOSTMODAL";
+// 포스트 수정 모달 보이기
+export const SHOW_UPDATEPOSTMODAL = "SHOW_UPDATEPOSTMODAL";
+// 포스트 수정 모달 숨기기
+export const HIDE_UPDATEPOSTMODAL = "HIDE_UPDATEPOSTMODAL";
 
 export const initialState = {
   isShowLoginUi: false, // 로그인 화면 보이기 유무
@@ -32,7 +40,7 @@ export const initialState = {
 };
 
 export default (state = initialState, action) =>
-  produce(state, draft => {
+  produce(state, (draft) => {
     switch (action.type) {
       case SHOW_LOGINLAYER: {
         draft.isShowLoginUi = true;

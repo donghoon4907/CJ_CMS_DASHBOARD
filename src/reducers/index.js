@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
 import common from "./common";
 import user from "./user";
-import post from "./post";
 import program from "./program";
+import content from "./content";
+import post from "./post";
 
-export default combineReducers({ common, user, post, program });
+export default combineReducers({ common, user, post, program, content });
 
 /**
  * Immer pattern
