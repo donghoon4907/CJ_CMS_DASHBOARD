@@ -44,7 +44,6 @@ const SetPostModalPresentaion = ({
               style={{
                 width: "100%",
                 height: 250,
-                cursor: "pointer",
                 border: "1px solid #DEE2E6",
                 borderRadius: 5
               }}

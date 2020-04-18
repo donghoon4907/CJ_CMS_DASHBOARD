@@ -14,16 +14,24 @@ import moment from "moment";
 
 const DashboardContainer = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
-  const { isShowAddPostUi, isShowAddPgmUi, isShowUpdatePgmUi } = useSelector(
-    (state) => state.common
-  );
+  const { userInfo } = useSelector(state => state.user);
+  const {
+    isShowAddPgmUi,
+    isShowUpdatePgmUi,
+    isShowAddContentUi,
+    isShowUpdateContentUi,
+    isShowAddPostUi,
+    isShowUpdatePostUi,
+    isShowSearchPgmUi,
+    isShowSearchCastUi
+  } = useSelector(state => state.common);
   const [activeMenu, setActiveMenu] = useState(1);
 
   // 메뉴 클릭
-  const onClickMenuIcon = useCallback((menuNum) => {
+  const onClickMenuIcon = useCallback(menuNum => {
     setActiveMenu(menuNum);
   }, []);
+
   // 로그아웃
   const onLogout = useCallback(() => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
@@ -40,7 +48,9 @@ const DashboardContainer = () => {
       payload: {
         lastId: 0,
         limit: 20,
-        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        startDate: moment()
+          .subtract(7, "d")
+          .format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD")
       }
     });
@@ -49,7 +59,9 @@ const DashboardContainer = () => {
       payload: {
         lastId: 0,
         limit: 20,
-        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        startDate: moment()
+          .subtract(7, "d")
+          .format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD")
       }
     });
@@ -59,7 +71,9 @@ const DashboardContainer = () => {
       payload: {
         lastId: 0,
         limit: 20,
-        startDate: moment().subtract(7, "d").format("YYYY-MM-DD"),
+        startDate: moment()
+          .subtract(7, "d")
+          .format("YYYY-MM-DD"),
         endDate: moment().format("YYYY-MM-DD")
       }
     });
@@ -80,9 +94,14 @@ const DashboardContainer = () => {
     <DashboardPresention
       userInfo={userInfo}
       activeMenu={activeMenu}
-      isShowAddPostUi={isShowAddPostUi}
       isShowAddPgmUi={isShowAddPgmUi}
       isShowUpdatePgmUi={isShowUpdatePgmUi}
+      isShowAddContentUi={isShowAddContentUi}
+      isShowUpdateContentUi={isShowUpdateContentUi}
+      isShowAddPostUi={isShowAddPostUi}
+      isShowUpdatePostUi={isShowUpdatePostUi}
+      isShowSearchPgmUi={isShowSearchPgmUi}
+      isShowSearchCastUi={isShowSearchCastUi}
       onClickMenuIcon={onClickMenuIcon}
       onLogout={onLogout}
     />

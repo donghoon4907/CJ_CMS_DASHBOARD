@@ -22,14 +22,15 @@ import {
   GET_AGEGRADELIST_FAILURE,
   GET_CHANNELLIST_REQUEST,
   GET_CHANNELLIST_SUCCESS,
-  GET_CHANNELLIST_FAILURE
+  GET_CHANNELLIST_FAILURE,
+  SEARCH_PROGRAMLIST_REQUEST,
+  SEARCH_PROGRAMLIST_SUCCESS,
+  SEARCH_PROGRAMLIST_FAILURE
 } from "../reducers/program";
 import {
-  SHOW_LOGINLAYER,
   HIDE_ADDPROGRAMMODAL,
   HIDE_UPDATEPROGRAMMODAL
 } from "../reducers/common";
-import { LOG_OUT_SUCCESS } from "../reducers/user";
 import { axiosErrorHandle } from "../module/error";
 import { showToast } from "../module/toast";
 import { makeListQuery } from "../module/query";
@@ -169,25 +170,17 @@ function* addItem(action) {
   } else if (error) {
     const { message, type, isExpired } = axiosErrorHandle(error);
     if (isExpired) {
-      yield put({
-        type: LOG_OUT_SUCCESS
-      });
-      yield put({
-        type: HIDE_ADDPROGRAMMODAL
-      });
-      yield put({
-        type: SHOW_LOGINLAYER
-      });
+      window.location.reload();
     } else {
       yield put({
         type: ADD_PROGRAMITEM_FAILURE,
         payload: message
       });
+      showToast({
+        type,
+        message
+      });
     }
-    showToast({
-      type,
-      message
-    });
   }
 }
 function* updateItem(action) {
@@ -210,25 +203,17 @@ function* updateItem(action) {
   } else if (error) {
     const { message, type, isExpired } = axiosErrorHandle(error);
     if (isExpired) {
-      yield put({
-        type: LOG_OUT_SUCCESS
-      });
-      yield put({
-        type: HIDE_UPDATEPROGRAMMODAL
-      });
-      yield put({
-        type: SHOW_LOGINLAYER
-      });
+      window.location.reload();
     } else {
       yield put({
         type: UPDATE_PROGRAMITEM_FAILURE,
         payload: message
       });
+      showToast({
+        type,
+        message
+      });
     }
-    showToast({
-      type,
-      message
-    });
   }
 }
 function* getGenreList(action) {
@@ -307,6 +292,25 @@ function* getChannelList(action) {
     });
   }
 }
+function* searchList(action) {
+  const { response, error } = yield call(getListAPI, action.payload);
+  if (response) {
+    yield put({
+      type: SEARCH_PROGRAMLIST_SUCCESS,
+      payload: response.data
+    });
+  } else if (error) {
+    const { message, type } = axiosErrorHandle(error);
+    yield put({
+      type: SEARCH_PROGRAMLIST_FAILURE,
+      payload: message
+    });
+    showToast({
+      type,
+      message
+    });
+  }
+}
 // 목록 로드
 function* watchGetList() {
   yield takeEvery(GET_PROGRAMLIST_REQUEST, getList);
@@ -335,6 +339,10 @@ function* watchGetAgeGradeList() {
 function* watchGetChannelList() {
   yield takeEvery(GET_CHANNELLIST_REQUEST, getChannelList);
 }
+// 검색 결과 로드
+function* watchSearchList() {
+  yield takeEvery(SEARCH_PROGRAMLIST_REQUEST, searchList);
+}
 export default function*() {
   yield all([
     fork(watchGetList),
@@ -343,6 +351,7 @@ export default function*() {
     fork(watchGetGenreList),
     fork(watchGetDetailGenreList),
     fork(watchGetAgeGradeList),
-    fork(watchGetChannelList)
+    fork(watchGetChannelList),
+    fork(watchSearchList)
   ]);
 }

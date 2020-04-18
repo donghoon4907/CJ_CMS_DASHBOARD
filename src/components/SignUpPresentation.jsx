@@ -56,7 +56,7 @@ const SignUpPresentation = ({
           />
         ) : (
           <Account
-            style={{ width: 120, height: 120, cursor: "pointer" }}
+            style={{ width: 120, height: 120 }}
             onClick={onClickThumbnail}
           />
         )}

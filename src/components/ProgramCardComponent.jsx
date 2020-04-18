@@ -9,9 +9,8 @@ import {
   EllipsisText
 } from "./PublishStyledComponent";
 
-const ProgramCardComponent = (props) => {
+const ProgramCardComponent = props => {
   const {
-    id,
     title,
     description,
     createdAt,
@@ -23,7 +22,7 @@ const ProgramCardComponent = (props) => {
     onClickItem
   } = props;
   return (
-    <CardWrap key={id}>
+    <CardWrap>
       <CardHeader>
         <div>
           <img
@@ -53,7 +52,7 @@ const ProgramCardComponent = (props) => {
         <div>
           {Genre.name}, {DetailGenre.name}
         </div>
-        <div>{Contents.length === 0 ? "예정" : `${Contents.length}화`}</div>
+        <div>{Contents.length === 0 ? "방송예정" : `${Contents.length}화`}</div>
       </CardFooter>
     </CardWrap>
   );
@@ -62,7 +61,6 @@ const ProgramCardComponent = (props) => {
 export default ProgramCardComponent;
 
 ProgramCardComponent.propTypes = {
-  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   createdAt: PropTypes.string.isRequired,

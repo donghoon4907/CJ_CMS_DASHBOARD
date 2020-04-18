@@ -18,6 +18,12 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     margin: 0;
   }
+  .form-check-inline .form-check-input {
+    margin-right: 0 !important;
+  }
+  svg {
+    cursor: pointer;
+  }
 `;
 // 리덕스 활성화
 const sagaMiddleware = createSagaMiddleware();

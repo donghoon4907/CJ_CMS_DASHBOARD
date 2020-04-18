@@ -43,7 +43,7 @@ const ArticleComponent = ({
           <StyledDatePicker
             className="form-control"
             selected={startDate}
-            onChange={(date) => setStartDate(date)}
+            onChange={date => setStartDate(date)}
             selectsStart
             isClearable
             startDate={startDate}
@@ -57,7 +57,7 @@ const ArticleComponent = ({
           <StyledDatePicker
             className="form-control"
             selected={endDate}
-            onChange={(date) => setEndDate(date)}
+            onChange={date => setEndDate(date)}
             selectsEnd
             isClearable
             startDate={startDate}
@@ -123,9 +123,15 @@ const ArticleComponent = ({
     </SearchBar>
     <ListWrap className="p-3" onScroll={onScrollInList}>
       {loadedData && loadedData.length > 0 ? (
-        loadedData.map((data) => {
+        loadedData.map(data => {
           if (type === "프로그램") {
-            return <ProgramCardComponent {...data} onClickItem={onClickItem} />;
+            return (
+              <ProgramCardComponent
+                key={data.id}
+                {...data}
+                onClickItem={onClickItem}
+              />
+            );
           }
           // else if (type === "콘텐츠") {
           //   return <ContentCardComponent {...data} onClickItem={onClickItem} />

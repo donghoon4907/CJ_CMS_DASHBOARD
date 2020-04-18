@@ -180,3 +180,14 @@ export const Video = ({ style, onClick }) => (
     <path d="M16 16c0 1.104-.896 2-2 2h-12c-1.104 0-2-.896-2-2v-8c0-1.104.896-2 2-2h12c1.104 0 2 .896 2 2v8zm8-10l-6 4.223v3.554l6 4.223v-12z" />
   </svg>
 );
+
+export const Remove = ({ style, onClick }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    style={style}
+    onClick={onClick}
+    viewBox="0 0 24 24"
+  >
+    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-12v-2h12v2z" />
+  </svg>
+);

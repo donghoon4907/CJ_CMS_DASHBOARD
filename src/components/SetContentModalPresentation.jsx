@@ -1,22 +1,36 @@
 import React from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Form,
+  InputGroup,
+  FormControl,
+  ProgressBar,
+  Table
+} from "react-bootstrap";
 import PropTypes from "prop-types";
-import { Video } from "../assets/icons";
-import { StyledDatePicker } from "./PublishStyledComponent";
-import moment from "moment";
+import { Video, Search, Remove } from "../assets/icons";
+import DatePicker from "react-datepicker";
 
-const SetProgramModalPresentaion = ({
+const SetContentModalPresentaion = ({
   type,
-  pgm,
-  pgmEl,
+  progress,
+  videoEl,
+  selectedProgram,
+  selectedCast,
   description,
   descriptionEl,
   broadcastDate,
   broadcastDateEl,
   setBroadcastDate,
-  onHide,
-  onChangePgm,
+  onClickVideo,
+  onClickRemoveSelectedCast,
+  onClickShowPgmModal,
+  onClickShowCastModal,
+  onChangeVideo,
   onChangeDescription,
+  onCancelUpload,
+  onHide,
   onSubmit
 }) => (
   <Modal show={true} onHide={onHide} animation={true} size="lg">
@@ -30,27 +44,76 @@ const SetProgramModalPresentaion = ({
         <Form.Group>
           <Form.Label>영상</Form.Label>
           <br />
-          <Video
-            style={{
-              width: "100%",
-              height: 250,
-              cursor: "pointer",
-              border: "1px solid #DEE2E6",
-              borderRadius: 5
-            }}
-          />
+          {progress > 0 ? (
+            progress === 100 ? (
+              <div className="d-flex justify-content-between">
+                <div>업로드 완료되었습니다.</div>
+                <div>
+                  <Button variant="outline-secondary" onClick={onCancelUpload}>
+                    재업로드
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="d-flex justify-content-between">
+                  <div>업로드 중입니다.</div>
+                  <div></div>
+                </div>
+                <br />
+                <ProgressBar animated now={progress} />
+              </div>
+            )
+          ) : (
+            <Video
+              onClick={onClickVideo}
+              style={{
+                width: "100%",
+                height: 100,
+                border: "1px solid #DEE2E6",
+                borderRadius: 5
+              }}
+            />
           )}
-          <input type="file" hidden accept="video/mp4" />
+
+          <input
+            type="file"
+            hidden
+            accept="video/mp4"
+            onChange={onChangeVideo}
+            ref={videoEl}
+          />
         </Form.Group>
         <Form.Group>
           <Form.Label>프로그램</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="프로그램을 선택하세요."
-            value={pgm}
-            onChange={onChangePgm}
-            ref={pgmEl}
-          />
+          <InputGroup>
+            <FormControl
+              placeholder="프로그램을 선택하세요."
+              value={selectedProgram ? selectedProgram.title : ""}
+              readOnly
+            />
+            <InputGroup.Prepend>
+              <InputGroup.Text
+                onClick={onClickShowPgmModal}
+                style={{
+                  borderTopRightRadius: 5,
+                  borderBottomRightRadius: 5
+                }}
+              >
+                <Search style={{ width: 15, height: 15 }} />
+              </InputGroup.Text>
+            </InputGroup.Prepend>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>화수</Form.Label>
+          <InputGroup>
+            <FormControl
+              placeholder="프로그램을 선택하세요."
+              value={selectedProgram ? selectedProgram.epiNumber : ""}
+              readOnly
+            />
+          </InputGroup>
         </Form.Group>
         <Form.Group>
           <Form.Label>내용</Form.Label>
@@ -69,14 +132,70 @@ const SetProgramModalPresentaion = ({
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group>
-          <Form.Label>방송일</Form.Label>
-          <StyledDatePicker
+          <Form.Label>출연진</Form.Label>
+          <InputGroup>
+            <FormControl placeholder="출연진을 선택하세요." readOnly />
+            <InputGroup.Prepend>
+              <InputGroup.Text
+                onClick={onClickShowCastModal}
+                style={{
+                  borderTopRightRadius: 5,
+                  borderBottomRightRadius: 5
+                }}
+              >
+                <Search style={{ width: 15, height: 15 }} />
+              </InputGroup.Text>
+            </InputGroup.Prepend>
+          </InputGroup>
+        </Form.Group>
+        <hr />
+        <Form.Group>
+          <Form.Label>선택한 출연진</Form.Label>
+          <br />
+          <Table striped bordered hover className="text-center">
+            <thead>
+              <tr>
+                <th>출연자명</th>
+                <th>본명</th>
+                <th>삭제</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(!selectedCast || selectedCast.length === 0) && (
+                <tr>
+                  <td colSpan={3}>출연진을 선택하세요.</td>
+                </tr>
+              )}
+              {selectedCast &&
+                selectedCast.map(({ id, name, real_name }) => (
+                  <tr key={id}>
+                    <td>{name}</td>
+                    <td>{real_name}</td>
+                    <td>
+                      <Remove
+                        style={{ width: 20, height: 20 }}
+                        onClick={() => onClickRemoveSelectedCast({ id })}
+                      />
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label style={{ marginRight: 20 }}>방송일</Form.Label>
+          <DatePicker
+            style={{ width: 150 }}
             className="form-control"
             selected={broadcastDate}
-            onChange={(date) => setBroadcastDate(date)}
+            onChange={date => setBroadcastDate(date)}
             isClearable
             placeholderText="입력하세요."
-            dateFormat="yyyy-MM-dd HH:mm:ss"
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            timeCaption="time"
+            dateFormat="yyyy-MM-dd HH:mm"
+            showTimeSelect
             ref={broadcastDateEl}
           />
         </Form.Group>
@@ -92,13 +211,33 @@ const SetProgramModalPresentaion = ({
     </Modal.Footer>
   </Modal>
 );
-export default SetProgramModalPresentaion;
+export default SetContentModalPresentaion;
 
-SetProgramModalPresentaion.propTypes = {
+SetContentModalPresentaion.propTypes = {
   type: PropTypes.string.isRequired,
+  progress: PropTypes.number.isRequired,
+  videoEl: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.object })
+  ]),
   description: PropTypes.string.isRequired,
   descriptionEl: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object })
-  ])
+  ]),
+  broadcastDate: PropTypes.object.isRequired,
+  broadcastDateEl: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.object })
+  ]),
+  setBroadcastDate: PropTypes.func.isRequired,
+  onClickVideo: PropTypes.func.isRequired,
+  onClickRemoveSelectedCast: PropTypes.func.isRequired,
+  onClickShowPgmModal: PropTypes.func.isRequired,
+  onClickShowCastModal: PropTypes.func.isRequired,
+  onChangeVideo: PropTypes.func.isRequired,
+  onChangeDescription: PropTypes.func.isRequired,
+  onCancelUpload: PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
 };

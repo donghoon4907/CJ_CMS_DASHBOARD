@@ -9,17 +9,24 @@ import {
   TopMenu
 } from "./DashboardStyledComponent";
 import { Publish, Home, Setting } from "../assets/icons";
-import SetPostModal from "./SetPostModalContainer";
 import SetProgramModal from "./SetProgramModalContainer";
+import SetContentModal from "./SetContentModalContainer";
+import SetPostModal from "./SetPostModalContainer";
+import SearchProgramModal from "./SearchProgramModalContainer";
+import SearchCastModal from "./SearchCastModalContainer";
 import PublishContainer from "./PublishContainer";
-// import Chart from "./LineChart";
 
 const DashboardPresentation = ({
   userInfo,
   activeMenu,
-  isShowAddPostUi,
   isShowAddPgmUi,
   isShowUpdatePgmUi,
+  isShowAddContentUi,
+  isShowUpdateContentUi,
+  isShowAddPostUi,
+  isShowUpdatePostUi,
+  isShowSearchPgmUi,
+  isShowSearchCastUi,
   onClickMenuIcon,
   onLogout
 }) => (
@@ -85,8 +92,12 @@ const DashboardPresentation = ({
       </TopMenu>
       {activeMenu === 2 && <PublishContainer />}
     </ContentMenu>
-    {isShowAddPostUi && <SetPostModal />}
     {(isShowAddPgmUi || isShowUpdatePgmUi) && <SetProgramModal />}
+    {(isShowAddContentUi || isShowUpdateContentUi) && <SetContentModal />}
+    {(isShowAddPostUi || isShowUpdatePostUi) && <SetPostModal />}
+    {isShowSearchPgmUi && <SearchProgramModal />}
+    {isShowSearchPgmUi && <SearchProgramModal />}
+    {isShowSearchCastUi && <SearchCastModal />}
   </Container>
 );
 
@@ -108,6 +119,7 @@ DashboardPresentation.propTypes = {
   isShowAddPostUi: PropTypes.bool.isRequired,
   isShowAddPgmUi: PropTypes.bool.isRequired,
   isShowUpdatePgmUi: PropTypes.bool.isRequired,
+  isShowSearchPgmUi: PropTypes.bool.isRequired,
   onClickMenuIcon: PropTypes.func.isRequired,
   onLogout: PropTypes.func.isRequired
 };

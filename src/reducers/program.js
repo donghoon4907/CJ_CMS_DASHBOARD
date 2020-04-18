@@ -35,6 +35,16 @@ export const GET_AGEGRADELIST_FAILURE = "GET_AGEGRADELIST_FAILURE";
 export const GET_CHANNELLIST_REQUEST = "GET_CHANNELLIST_REQUEST";
 export const GET_CHANNELLIST_SUCCESS = "GET_CHANNELLIST_SUCCESS";
 export const GET_CHANNELLIST_FAILURE = "GET_CHANNELLIST_FAILURE";
+// 검색
+export const SEARCH_PROGRAMLIST_REQUEST = "SEARCH_PROGRAMLIST_REQUEST";
+export const SEARCH_PROGRAMLIST_SUCCESS = "SEARCH_PROGRAMLIST_SUCCESS";
+export const SEARCH_PROGRAMLIST_FAILURE = "SEARCH_PROGRAMLIST_FAILURE";
+// 검색 후 프로그램 선택
+export const SELECT_PROGRAM = "SELECT_PROGRAM";
+// 검색 결과 초기화
+export const INIT_SEARCHEDPROGRAM = "INIT_SEARCHEDPROGRAM";
+// 선택된 프로그램 초기화
+export const INIT_SELECTEDPROGRAM = "INIT_SELECTEDPROGRAM";
 
 export const initialState = {
   isGetListLoading: false, // 목록 가져오기 시도 중 여부
@@ -44,7 +54,16 @@ export const initialState = {
   isGetDetailGernreListLoading: false, // 세부 장르 가져오기 시도 중 여부
   isAgeGradeListLoading: false, // 연령 등급 가져오기 시도 중 여부
   isChannelListLoading: false, // 채널 가져오기 시도 중 여부
+  isSearchListLoading: false, // 프로그램 검색 시도 중 여부
+  isSuccessAddItem: false, // 등록 성공 여부
   activeProgram: null, // 현재 수정 중인 프로그램 정보
+  loadedProgram: null, // 가져온 목록 정보
+  loadedGenre: null, // 가져온 장르 정보
+  loadedDetailGenre: null, // 최근 가져온 세부장르 정보
+  loadedAgeGrade: null, // 가져온 연령 등급 정보
+  loadedChannel: null, // 가져온 채널 등급 정보
+  searchedProgram: null, // 검색 결과 정보
+  selectedProgram: null, // 검색 후 선택한 프로그램 정보
   getListErrorReason: "", // 목록 가져오기 요청 오류 사유
   addItemErrorReason: "", // 등록 요청 오류 사유
   updateItemErrorReason: "", // 수정 요청 오류 사유
@@ -52,12 +71,7 @@ export const initialState = {
   getDetailGerneListErrorReason: "", // 세부 장르 가져오기 요청 오류 사유
   getAgeGradeListErrorReason: "", // 연령 등급 가져오기 요청 오류 사유
   getChannelListErrorReason: "", // 채널 가져오기 요청 오류 사유
-  loadedProgram: null, // 가져온 목록 정보
-  loadedGenre: null, // 가져온 장르 정보
-  loadedDetailGenre: null, // 최근 가져온 세부장르 정보
-  loadedAgeGrade: null, // 가져온 연령 등급 정보
-  loadedChannel: null, // 가져온 채널 등급 정보
-  isSuccessAddItem: false // 등록 성공 여부
+  searchListErrorReason: "" // 검색 요청 오류 사유
 };
 
 export default (state = initialState, action) =>
@@ -178,6 +192,20 @@ export default (state = initialState, action) =>
         draft.getChannelListErrorReason = action.payload;
         break;
       }
+      case SEARCH_PROGRAMLIST_REQUEST: {
+        draft.isSearchListLoading = true;
+        break;
+      }
+      case SEARCH_PROGRAMLIST_SUCCESS: {
+        draft.isSearchListLoading = false;
+        draft.searchedProgram = action.payload;
+        break;
+      }
+      case SEARCH_PROGRAMLIST_FAILURE: {
+        draft.isSearchListLoading = false;
+        draft.searchListErrorReason = action.payload;
+        break;
+      }
       case ACTIVE_PROGRAMITEM: {
         if (draft.loadedProgram && draft.loadedProgram.length > 0) {
           draft.activeProgram = action.payload;
@@ -186,6 +214,18 @@ export default (state = initialState, action) =>
       }
       case INACTIVE_PROGRAMITEM: {
         draft.activeProgram = null;
+        break;
+      }
+      case SELECT_PROGRAM: {
+        draft.selectedProgram = action.payload;
+        break;
+      }
+      case INIT_SEARCHEDPROGRAM: {
+        draft.searchedProgram = null;
+        break;
+      }
+      case INIT_SELECTEDPROGRAM: {
+        draft.selectedProgram = null;
         break;
       }
       default:

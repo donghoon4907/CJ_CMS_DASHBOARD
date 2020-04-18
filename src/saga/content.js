@@ -10,14 +10,15 @@ import {
   ADD_CONTENTITEM_FAILURE,
   UPDATE_CONTENTITEM_REQUEST,
   UPDATE_CONTENTITEM_SUCCESS,
-  UPDATE_CONTENTITEM_FAILURE
+  UPDATE_CONTENTITEM_FAILURE,
+  SEARCH_CASTLIST_REQUEST,
+  SEARCH_CASTLIST_SUCCESS,
+  SEARCH_CASTLIST_FAILURE
 } from "../reducers/content";
 import {
-  SHOW_LOGINLAYER,
   HIDE_ADDCONTENTMODAL,
   HIDE_UPDATECONTENTMODAL
 } from "../reducers/common";
-import { LOG_OUT_SUCCESS } from "../reducers/user";
 import { axiosErrorHandle } from "../module/error";
 import { showToast } from "../module/toast";
 import { makeListQuery } from "../module/query";
@@ -25,78 +26,42 @@ import { makeListQuery } from "../module/query";
 function getListAPI(payload) {
   return axios
     .get(makeListQuery({ type: "content", ...payload }))
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function addItemAPI(payload) {
-  const {
-    title,
-    description,
-    selectedFile,
-    prdtYear,
-    genre,
-    detailGenre,
-    ageGrade,
-    channel
-  } = payload;
-
-  const formData = new FormData();
-  formData.append("title", title);
-  formData.append("product_year", prdtYear);
-  formData.append("genre", genre);
-  formData.append("detailgenre", detailGenre);
-  formData.append("agegrade", ageGrade);
-  formData.append("channel", channel);
-  if (description) {
-    formData.append("description", description);
-  }
-  if (selectedFile) {
-    formData.append("file", selectedFile);
-  }
-
   return axios
-    .post("/content/add", formData, {
-      withCredentials: true
-    })
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .post(
+      "/content/add",
+      { ...payload },
+      {
+        withCredentials: true
+      }
+    )
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function updateItemAPI(payload) {
-  const {
-    id,
-    title,
-    description,
-    selectedFile,
-    prdtYear,
-    genre,
-    detailGenre,
-    ageGrade,
-    channel
-  } = payload;
+  const { id, description } = payload;
 
   const formData = new FormData();
-  formData.append("title", title);
-  formData.append("product_year", prdtYear);
-  formData.append("genre", genre);
-  formData.append("detailgenre", detailGenre);
-  formData.append("agegrade", ageGrade);
-  formData.append("channel", channel);
-  if (id) {
-    formData.append("id", id);
-  }
+  formData.append("id", id);
   if (description) {
     formData.append("description", description);
   }
-  if (selectedFile) {
-    formData.append("file", selectedFile);
-  }
 
   return axios
-    .put("/program/update", formData, {
+    .put("/content/update", formData, {
       withCredentials: true
     })
-    .then((response) => ({ response }))
-    .catch((error) => ({ error }));
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
+}
+function getCastListAPI(payload) {
+  return axios
+    .get(makeListQuery({ type: "cast", ...payload }))
+    .then(response => ({ response }))
+    .catch(error => ({ error }));
 }
 function* getList(action) {
   const { response, error } = yield call(getListAPI, action.payload);
@@ -133,25 +98,17 @@ function* addItem(action) {
   } else if (error) {
     const { message, type, isExpired } = axiosErrorHandle(error);
     if (isExpired) {
-      yield put({
-        type: LOG_OUT_SUCCESS
-      });
-      yield put({
-        type: HIDE_ADDCONTENTMODAL
-      });
-      yield put({
-        type: SHOW_LOGINLAYER
-      });
+      window.location.reload();
     } else {
       yield put({
         type: ADD_CONTENTITEM_FAILURE,
         payload: message
       });
+      showToast({
+        type,
+        message
+      });
     }
-    showToast({
-      type,
-      message
-    });
   }
 }
 function* updateItem(action) {
@@ -174,28 +131,38 @@ function* updateItem(action) {
   } else if (error) {
     const { message, type, isExpired } = axiosErrorHandle(error);
     if (isExpired) {
-      yield put({
-        type: LOG_OUT_SUCCESS
-      });
-      yield put({
-        type: HIDE_UPDATECONTENTMODAL
-      });
-      yield put({
-        type: SHOW_LOGINLAYER
-      });
+      window.location.reload();
     } else {
       yield put({
         type: UPDATE_CONTENTITEM_FAILURE,
         payload: message
       });
+      showToast({
+        type,
+        message
+      });
     }
+  }
+}
+function* searchCastList(action) {
+  const { response, error } = yield call(getCastListAPI, action.payload);
+  if (response) {
+    yield put({
+      type: SEARCH_CASTLIST_SUCCESS,
+      payload: response.data
+    });
+  } else if (error) {
+    const { message, type } = axiosErrorHandle(error);
+    yield put({
+      type: SEARCH_CASTLIST_FAILURE,
+      payload: message
+    });
     showToast({
       type,
       message
     });
   }
 }
-
 // 목록 로드
 function* watchGetList() {
   yield takeEvery(GET_CONTENTLIST_REQUEST, getList);
@@ -208,6 +175,15 @@ function* watchAddItem() {
 function* watchUpdateItem() {
   yield takeEvery(UPDATE_CONTENTITEM_REQUEST, updateItem);
 }
-export default function* () {
-  yield all([fork(watchGetList), fork(watchAddItem), fork(watchUpdateItem)]);
+// 츌욘잔 검색 결과 로드
+function* watchCastSearchList() {
+  yield takeEvery(SEARCH_CASTLIST_REQUEST, searchCastList);
+}
+export default function*() {
+  yield all([
+    fork(watchGetList),
+    fork(watchAddItem),
+    fork(watchUpdateItem),
+    fork(watchCastSearchList)
+  ]);
 }
