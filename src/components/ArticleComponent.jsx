@@ -12,6 +12,7 @@ import {
 import EmptyComponent from "./EmptyComponent";
 import LoadingComponent from "./LoadingComponent";
 import ProgramCardComponent from "./ProgramCardComponent";
+import ContentCardComponent from "./ContentCardComponent";
 
 const ArticleComponent = ({
   type,
@@ -132,10 +133,16 @@ const ArticleComponent = ({
                 onClickItem={onClickItem}
               />
             );
+          } else if (type === "콘텐츠") {
+            return (
+              <ContentCardComponent
+                key={data.id}
+                {...data}
+                onClickItem={onClickItem}
+              />
+            );
           }
-          // else if (type === "콘텐츠") {
-          //   return <ContentCardComponent {...data} onClickItem={onClickItem} />
-          // } else if (type === "포스트") {
+          // else if (type === "포스트") {
           //   return <PostCardComponent {...data} onClickItem={onClickItem} />
           // }
           else {

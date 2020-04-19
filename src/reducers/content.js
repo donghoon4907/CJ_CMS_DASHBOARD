@@ -136,7 +136,11 @@ export default (state = initialState, action) =>
       }
       case SELECT_CAST: {
         if (!draft.selectedCast) {
-          draft.selectedCast = [action.payload];
+          if (Array.isArray(action.payload)) {
+            draft.selectedCast = action.payload;
+          } else {
+            draft.selectedCast = [action.payload];
+          }
         } else {
           draft.selectedCast = draft.selectedCast.concat(action.payload);
         }

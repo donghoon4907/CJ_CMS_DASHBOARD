@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
   CardWrap,
   CardHeader,
@@ -9,8 +8,16 @@ import {
   EllipsisText
 } from "./PublishStyledComponent";
 
-const ContentCardComponent = (props) => {
-  const { id, title, description, onClickItem } = props;
+const ContentCardComponent = props => {
+  const {
+    id,
+    description,
+    createdAt,
+    epiNumber,
+    Program: { title, Channel, Images },
+    onClickItem,
+    Posts
+  } = props;
   return (
     <CardWrap key={id}>
       <CardHeader>
@@ -33,46 +40,19 @@ const ContentCardComponent = (props) => {
         />
       </CardThumbnail>
       <CardBody>
-        <EllipsisText onClick={() => onClickItem(props)}>{title}</EllipsisText>
+        <EllipsisText onClick={() => onClickItem(props)}>
+          {title}-{epiNumber}화
+        </EllipsisText>
         <EllipsisText onClick={() => onClickItem(props)}>
           {description}
         </EllipsisText>
       </CardBody>
       <CardFooter>
-        <div>
-          {Genre.name}, {DetailGenre.name}
-        </div>
-        <div>{Contents.length === 0 ? "예정" : `${Contents.length}화`}</div>
+        <div></div>
+        <div>포스트 : {Posts.length}개 목록</div>
       </CardFooter>
     </CardWrap>
   );
 };
 
-export default ProgramCardComponent;
-
-ProgramCardComponent.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  createdAt: PropTypes.string.isRequired,
-  Images: PropTypes.arrayOf(
-    PropTypes.shape({
-      src: PropTypes.string.isRequired
-    })
-  ),
-  Channel: PropTypes.shape({
-    Images: PropTypes.arrayOf(
-      PropTypes.shape({
-        src: PropTypes.string.isRequired
-      })
-    )
-  }),
-  // Contents,
-  Genre: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }),
-  DetailGenre: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }),
-  onClickItem: PropTypes.func.isRequired
-};
+export default ContentCardComponent;

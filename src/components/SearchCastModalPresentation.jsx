@@ -113,7 +113,6 @@ SearchCastModalPresentation.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object })
   ]),
-  selectedPgmId: PropTypes.number.isRequired,
   onChangeSearchKeyword: PropTypes.func.isRequired,
   onKeyDownSearchKeyword: PropTypes.func.isRequired,
   onClickSearchBtn: PropTypes.func.isRequired,

@@ -7,11 +7,14 @@ import {
   HIDE_UPDATECONTENTMODAL,
   SHOW_SEARCHCASTMODAL
 } from "../reducers/common";
+import { SELECT_PROGRAM } from "../reducers/program";
 import {
   ADD_CONTENTITEM_REQUEST,
   UPDATE_CONTENTITEM_REQUEST,
   INACTIVE_CONTENTITEM,
-  REMOVE_SELECTEDCAST
+  REMOVE_SELECTEDCAST,
+  INIT_SELECTEDCAST,
+  SELECT_CAST
 } from "../reducers/content";
 import moment from "moment";
 import axios from "axios";
@@ -48,6 +51,9 @@ const SetContentModalContainer = () => {
     });
     dispatch({
       type: INACTIVE_CONTENTITEM
+    });
+    dispatch({
+      type: INIT_SELECTEDCAST
     });
   }, [progress, dispatch]);
 
@@ -136,14 +142,17 @@ const SetContentModalContainer = () => {
   }, []);
 
   const onSubmit = useCallback(() => {
-    if (!src) {
-      alert("영상을 업로드하세요.");
-      return;
+    if (type === "등록") {
+      if (!src) {
+        alert("영상을 업로드하세요.");
+        return;
+      }
+      if (!selectedProgram) {
+        alert("프로그램을 선택하세요.");
+        return;
+      }
     }
-    if (!selectedProgram) {
-      alert("프로그램을 선택하세요.");
-      return;
-    }
+
     if (description && description.length > 500) {
       alert("내용은 500자 이내로 입력하세요.");
       descriptionEl.current.focus();
@@ -170,6 +179,7 @@ const SetContentModalContainer = () => {
       }
     });
   }, [
+    type,
     src,
     runtime,
     selectedProgram,
@@ -182,9 +192,21 @@ const SetContentModalContainer = () => {
   // 수정 시 기본 값 설정
   useEffect(() => {
     if (activeContent) {
-      const { description } = activeContent;
+      const { description, Casts, epiNumber, Program } = activeContent;
       setType("수정");
       setDescription(description);
+      dispatch({
+        type: SELECT_CAST,
+        payload: Casts
+      });
+      dispatch({
+        type: SELECT_PROGRAM,
+        payload: {
+          id: Program.id,
+          title: Program.title,
+          epiNumber: epiNumber
+        }
+      });
     }
   }, [activeContent, dispatch]);
 

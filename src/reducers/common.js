@@ -90,7 +90,7 @@ export default (state = initialState, action) =>
         break;
       }
       case HIDE_ADDCONTENTMODAL: {
-        draft.isShowUpdateContentUi = false;
+        draft.isShowAddContentUi = false;
         break;
       }
       case SHOW_UPDATECONTENTMODAL: {
@@ -98,7 +98,7 @@ export default (state = initialState, action) =>
         break;
       }
       case HIDE_UPDATECONTENTMODAL: {
-        draft.isShowAddContentUi = false;
+        draft.isShowUpdateContentUi = false;
         break;
       }
       case SHOW_ADDPOSTMODAL: {

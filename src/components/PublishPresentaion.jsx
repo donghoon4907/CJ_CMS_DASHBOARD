@@ -118,7 +118,7 @@ const PublishPresentaion = ({
         onClickSearchBtn={onClickContentSearchBtn}
         onScrollInList={onScrollInContentList}
       />
-      <ArticleComponent
+      {/* <ArticleComponent
         type={"포스트"}
         isActive={activeMenu === 3}
         isLoadingData={isLoadingPost}
@@ -136,7 +136,7 @@ const PublishPresentaion = ({
         onKeyDownSearchKeyword={onKeyDownPostSearchKeyword}
         onClickSearchBtn={onClickPostSearchBtn}
         onScrollInList={onScrollInPostList}
-      />
+      /> */}
     </Article>
   </>
 );

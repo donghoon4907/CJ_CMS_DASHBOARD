@@ -41,49 +41,55 @@ const SetContentModalPresentaion = ({
       style={{ maxHeight: window.innerHeight - 200, overflowY: "auto" }}
     >
       <Form>
-        <Form.Group>
-          <Form.Label>영상</Form.Label>
-          <br />
-          {progress > 0 ? (
-            progress === 100 ? (
-              <div className="d-flex justify-content-between">
-                <div>업로드 완료되었습니다.</div>
-                <div>
-                  <Button variant="outline-secondary" onClick={onCancelUpload}>
-                    재업로드
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div>
+        {type === "등록" && (
+          <Form.Group>
+            <Form.Label>영상</Form.Label>
+            <br />
+            {progress > 0 ? (
+              progress === 100 ? (
                 <div className="d-flex justify-content-between">
-                  <div>업로드 중입니다.</div>
-                  <div></div>
+                  <div>업로드 완료되었습니다.</div>
+                  <div>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={onCancelUpload}
+                    >
+                      재업로드
+                    </Button>
+                  </div>
                 </div>
-                <br />
-                <ProgressBar animated now={progress} />
-              </div>
-            )
-          ) : (
-            <Video
-              onClick={onClickVideo}
-              style={{
-                width: "100%",
-                height: 100,
-                border: "1px solid #DEE2E6",
-                borderRadius: 5
-              }}
-            />
-          )}
+              ) : (
+                <div>
+                  <div className="d-flex justify-content-between">
+                    <div>업로드 중입니다.</div>
+                    <div></div>
+                  </div>
+                  <br />
+                  <ProgressBar animated now={progress} />
+                </div>
+              )
+            ) : (
+              <Video
+                onClick={onClickVideo}
+                style={{
+                  width: "100%",
+                  height: 200,
+                  border: "1px solid #DEE2E6",
+                  borderRadius: 5
+                }}
+              />
+            )}
 
-          <input
-            type="file"
-            hidden
-            accept="video/mp4"
-            onChange={onChangeVideo}
-            ref={videoEl}
-          />
-        </Form.Group>
+            <input
+              type="file"
+              hidden
+              accept="video/mp4"
+              onChange={onChangeVideo}
+              ref={videoEl}
+            />
+          </Form.Group>
+        )}
+
         <Form.Group>
           <Form.Label>프로그램</Form.Label>
           <InputGroup>
@@ -92,17 +98,19 @@ const SetContentModalPresentaion = ({
               value={selectedProgram ? selectedProgram.title : ""}
               readOnly
             />
-            <InputGroup.Prepend>
-              <InputGroup.Text
-                onClick={onClickShowPgmModal}
-                style={{
-                  borderTopRightRadius: 5,
-                  borderBottomRightRadius: 5
-                }}
-              >
-                <Search style={{ width: 15, height: 15 }} />
-              </InputGroup.Text>
-            </InputGroup.Prepend>
+            {type === "등록" && (
+              <InputGroup.Prepend>
+                <InputGroup.Text
+                  onClick={onClickShowPgmModal}
+                  style={{
+                    borderTopRightRadius: 5,
+                    borderBottomRightRadius: 5
+                  }}
+                >
+                  <Search style={{ width: 15, height: 15 }} />
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+            )}
           </InputGroup>
         </Form.Group>
         <Form.Group>

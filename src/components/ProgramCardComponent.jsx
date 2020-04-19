@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
   CardWrap,
   CardHeader,
@@ -59,29 +58,3 @@ const ProgramCardComponent = props => {
 };
 
 export default ProgramCardComponent;
-
-ProgramCardComponent.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  createdAt: PropTypes.string.isRequired,
-  Images: PropTypes.arrayOf(
-    PropTypes.shape({
-      src: PropTypes.string.isRequired
-    })
-  ),
-  Channel: PropTypes.shape({
-    Images: PropTypes.arrayOf(
-      PropTypes.shape({
-        src: PropTypes.string.isRequired
-      })
-    )
-  }),
-  // Contents,
-  Genre: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }),
-  DetailGenre: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }),
-  onClickItem: PropTypes.func.isRequired
-};
