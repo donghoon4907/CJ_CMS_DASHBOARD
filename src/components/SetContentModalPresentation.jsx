@@ -115,13 +115,7 @@ const SetContentModalPresentaion = ({
         </Form.Group>
         <Form.Group>
           <Form.Label>화수</Form.Label>
-          <InputGroup>
-            <FormControl
-              placeholder="프로그램을 선택하세요."
-              value={selectedProgram ? selectedProgram.epiNumber : ""}
-              readOnly
-            />
-          </InputGroup>
+          <Form.Control as="select" disabled={true}></Form.Control>
         </Form.Group>
         <Form.Group>
           <Form.Label>내용</Form.Label>
@@ -196,11 +190,11 @@ const SetContentModalPresentaion = ({
             style={{ width: 150 }}
             className="form-control"
             selected={broadcastDate}
-            onChange={date => setBroadcastDate(date)}
+            onChange={(date) => setBroadcastDate(date)}
             isClearable
             placeholderText="입력하세요."
             timeFormat="HH:mm"
-            timeIntervals={15}
+            timeIntervals={5}
             timeCaption="time"
             dateFormat="yyyy-MM-dd HH:mm"
             showTimeSelect

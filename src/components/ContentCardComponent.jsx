@@ -7,8 +7,9 @@ import {
   CardFooter,
   EllipsisText
 } from "./PublishStyledComponent";
+import { Add } from "../assets/icons";
 
-const ContentCardComponent = props => {
+const ContentCardComponent = (props) => {
   const {
     id,
     description,
@@ -49,7 +50,18 @@ const ContentCardComponent = props => {
       </CardBody>
       <CardFooter>
         <div></div>
-        <div>포스트 : {Posts.length}개 목록</div>
+        <div className="d-flex justify-content-center align-items-center">
+          <span>포스트 : {Posts.length}개 목록</span>
+          <Add
+            style={{
+              width: 15,
+              height: 15,
+              verticalAlign: "middle",
+              marginLeft: 5,
+              fill: "white"
+            }}
+          />
+        </div>
       </CardFooter>
     </CardWrap>
   );

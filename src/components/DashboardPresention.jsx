@@ -15,6 +15,7 @@ import SetPostModal from "./SetPostModalContainer";
 import SearchProgramModal from "./SearchProgramModalContainer";
 import SearchCastModal from "./SearchCastModalContainer";
 import PublishContainer from "./PublishContainer";
+import Test from "./VideoEditComponent";
 
 const DashboardPresentation = ({
   userInfo,
@@ -98,6 +99,7 @@ const DashboardPresentation = ({
     {isShowSearchPgmUi && <SearchProgramModal />}
     {isShowSearchPgmUi && <SearchProgramModal />}
     {isShowSearchCastUi && <SearchCastModal />}
+    <Test />
   </Container>
 );
 

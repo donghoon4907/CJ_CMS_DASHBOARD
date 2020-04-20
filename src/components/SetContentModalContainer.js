@@ -23,8 +23,8 @@ import { showToast } from "../module/toast";
 const SetContentModalContainer = () => {
   const dispatch = useDispatch();
 
-  const { activeContent, selectedCast } = useSelector(state => state.content); // 선택한 콘텐츠 ( 수정 여부 판단 )}
-  const { selectedProgram } = useSelector(state => state.program); //
+  const { activeContent, selectedCast } = useSelector((state) => state.content); // 선택한 콘텐츠 ( 수정 여부 판단 )}
+  const { selectedProgram } = useSelector((state) => state.program); //
 
   const videoEl = useRef(null);
   const descriptionEl = useRef(null);
@@ -91,7 +91,7 @@ const SetContentModalContainer = () => {
     }
   }, []);
 
-  const onChangeVideo = useCallback(async e => {
+  const onChangeVideo = useCallback(async (e) => {
     // 파일 선택창에서 취소 버튼을 누른 경우
     if (!e.target.value) return;
 
@@ -137,7 +137,7 @@ const SetContentModalContainer = () => {
     }
   }, []);
 
-  const onChangeDescription = useCallback(e => {
+  const onChangeDescription = useCallback((e) => {
     setDescription(e.target.value);
   }, []);
 
@@ -192,9 +192,16 @@ const SetContentModalContainer = () => {
   // 수정 시 기본 값 설정
   useEffect(() => {
     if (activeContent) {
-      const { description, Casts, epiNumber, Program } = activeContent;
+      const {
+        description,
+        Casts,
+        epiNumber,
+        Program,
+        broadcastedAt
+      } = activeContent;
       setType("수정");
       setDescription(description);
+      setBroadcastDate(new Date(broadcastedAt));
       dispatch({
         type: SELECT_CAST,
         payload: Casts

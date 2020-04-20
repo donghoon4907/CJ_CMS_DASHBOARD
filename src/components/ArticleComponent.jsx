@@ -44,7 +44,7 @@ const ArticleComponent = ({
           <StyledDatePicker
             className="form-control"
             selected={startDate}
-            onChange={date => setStartDate(date)}
+            onChange={(date) => setStartDate(date)}
             selectsStart
             isClearable
             startDate={startDate}
@@ -58,7 +58,7 @@ const ArticleComponent = ({
           <StyledDatePicker
             className="form-control"
             selected={endDate}
-            onChange={date => setEndDate(date)}
+            onChange={(date) => setEndDate(date)}
             selectsEnd
             isClearable
             startDate={startDate}
@@ -95,7 +95,7 @@ const ArticleComponent = ({
         <StyledButton onClick={onClickAddBtn}>{type} 등록</StyledButton>
       </Field>
       <Field flex={1}>
-        {channel && (
+        {typeof channel !== "undefined" && (
           <Form.Control
             as="select"
             value={channel}
@@ -124,7 +124,7 @@ const ArticleComponent = ({
     </SearchBar>
     <ListWrap className="p-3" onScroll={onScrollInList}>
       {loadedData && loadedData.length > 0 ? (
-        loadedData.map(data => {
+        loadedData.map((data) => {
           if (type === "프로그램") {
             return (
               <ProgramCardComponent

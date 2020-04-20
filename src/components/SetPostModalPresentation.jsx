@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, InputGroup, FormControl } from "react-bootstrap";
 import PropTypes from "prop-types";
 import HashTagComponent from "./HashTagComponent";
-import { Image } from "../assets/icons";
+import { Image, Search } from "../assets/icons";
 import { Thumbnail } from "./LoginStyledComponent";
 
 const SetPostModalPresentaion = ({
@@ -57,6 +57,37 @@ const SetPostModalPresentaion = ({
             hidden
             accept="image/jpg, image/jpeg, image/png"
           />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>프로그램</Form.Label>
+          <InputGroup>
+            <FormControl
+              placeholder="프로그램을 선택하세요."
+              // value={selectedProgram ? selectedProgram.title : ""}
+              readOnly
+            />
+            <InputGroup.Prepend>
+              <InputGroup.Text
+                // onClick={onClickShowPgmModal}
+                style={{
+                  borderTopRightRadius: 5,
+                  borderBottomRightRadius: 5
+                }}
+              >
+                <Search style={{ width: 15, height: 15 }} />
+              </InputGroup.Text>
+            </InputGroup.Prepend>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>화수</Form.Label>
+          <InputGroup>
+            <FormControl
+              placeholder="프로그램을 선택하세요."
+              // value={selectedProgram ? selectedProgram.epiNumber : ""}
+              readOnly
+            />
+          </InputGroup>
         </Form.Group>
         <Form.Group>
           <Form.Label>제목</Form.Label>
